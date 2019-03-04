@@ -13,6 +13,7 @@ export default {
 </script>
 
 <style>
+  @import "../static/css/reset.css";
   body {
     margin: 0;
     padding: 0;

@@ -1,7 +1,12 @@
 <template>
   <aside class="container">
-    <a class="cta" v-for="item in nav_text">
-      <span>{{item}}</span>
+    <div class="bg_container">
+      <ul class="bg_ul">
+        <li class="bg_little" v-for="item in list_count"></li>
+      </ul>
+    </div>
+    <router-link class="cta" v-for="item in nav_text" :to="item[1]" :key="item">
+      <span>{{item[0]}}</span>
       <span>
           <svg width="43px" height="23px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -11,7 +16,7 @@
             </g>
           </svg>
         </span>
-    </a>
+    </router-link>
   </aside>
 </template>
 
@@ -20,12 +25,22 @@
     data(){
       return {
         nav_text: [
-          "数字签名简介",
-          "哈希算法",
-          "非对称加密算法",
-          "数字签名之旅",
-          "我的题库"
-        ]
+          ["数字签名简介", "/introduce"],
+          ["哈希算法", "/hashlearn"],
+          ["非对称加密算法", "/acalearn"],
+          ["数字签名之旅", "/dstalearn"],
+          ["我的题库", "/queslearn"]
+        ],
+        list_count: []
+      }
+    },
+    created(){
+      this.createList()
+    },
+    methods: {
+      createList:function () {
+        let list = new Array(26)
+        this.list_count = list
       }
     }
   }

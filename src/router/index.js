@@ -25,6 +25,7 @@ export default new Router({
     {
       path: '/ordindex',
       name: 'OrdIndex',
+      redirect: '/introduce',
       component: OrdIndex,
       children:[{
         path: '/introduce',

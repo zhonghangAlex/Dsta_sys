@@ -31,6 +31,7 @@
 </script>
 
 <style scoped>
+  /*栈栏式布局相关内容*/
   .total_container{
     width: 100%;
     height: 100%;
@@ -40,10 +41,9 @@
     width: 100%;
     height: calc(100% - 55px);
     position: absolute;
-    background: red;
+    background-color: #f5f5f5;
   }
   .main_container{
-    background: pink;
     height: 100%;
     position: absolute;
     overflow: hidden;
