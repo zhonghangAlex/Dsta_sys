@@ -1,0 +1,30 @@
+/*所有视口通用样式*/
+.main-con {
+
+}
+
+.pad_con{
+  padding: 15px 0;
+  height: 100%;
+  overflow-y: auto;
+}
+/*学生用户-数组签名介绍界面*/
+.el-carousel__item{
+  border-radius: 10px;
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
+}

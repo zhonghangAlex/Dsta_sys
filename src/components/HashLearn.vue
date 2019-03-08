@@ -1,6 +1,5 @@
 <template>
-    <div>
-      22222222222222222222
+    <div class="main_con">
     </div>
 </template>
 
@@ -11,5 +10,5 @@
 </script>
 
 <style scoped>
-
+  @import "../assets/css/main.css";
 </style>

@@ -52,11 +52,18 @@
 }
 
 /*用户相关内容*/
-.userop_container {
+.userop_container{
   position: absolute;
   right: 0;
   width: 400px;
   height: 100%;
+}
+
+.userop_container_small{
+  position: absolute;
+  right: 0;
+  width: 100px;
+  height: 53px;
 }
 
 .item_container{
@@ -82,4 +89,55 @@
   font-family: "Microsoft YaHei UI";
   font-weight: 800;
   color: #555;
+}
+
+.icon_container {
+  display: inline;
+  position: absolute;
+  right: 0;
+}
+
+.icon_container li {
+  display: inline-block;
+  float: left;
+  width: 53px;
+  height: 53px;
+  text-align: center;
+  line-height: 53px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.icon_container li img {
+  margin-top: 10px;
+  position: relative;
+}
+
+.message_logo{
+  margin-top: -10px !important;
+}
+
+.icon_container li:hover {
+  transition: 0.5s;
+  background: rgb(236, 246, 247);
+}
+
+.item {
+  margin-top: 10px;
+}
+
+/*响应式相关*/
+@media screen and (max-width: 1200px) {
+  .userop_container{
+    display: none;
+  }
+  .stu_progress{
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .userop_container_small{
+    display: none;
+  }
 }

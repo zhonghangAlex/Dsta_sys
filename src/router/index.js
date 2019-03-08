@@ -8,6 +8,9 @@ import HashLearn from '@/components/HashLearn'
 import AcaLearn from '@/components/AcaLearn'
 import DstaTrip from '@/components/DstaTrip'
 import QuesLearn from '@/components/QuesLearn'
+import QuesMag from '@/components/QuesMag'
+import StuLearn from '@/components/StuLearn'
+import StuMag from '@/components/StuMag'
 
 Vue.use(Router)
 
@@ -15,6 +18,10 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/welcome'
+    },
+    {
+      path: '*',
       redirect: '/welcome'
     },
     {
@@ -52,7 +59,21 @@ export default new Router({
     {
       path: '/superindex',
       name: 'SuperIndex',
-      component: SuperIndex
+      redirect: '/quesmag',
+      component: SuperIndex,
+      children: [{
+        path: '/quesmag',
+        name: 'QuesMag',
+        component: QuesMag
+      },{
+        path: '/stulearn',
+        name: 'StuLearn',
+        component: StuLearn
+      },{
+        path: '/stumag',
+        name: 'StuMag',
+        component: StuMag
+      }]
     },
 
   ]

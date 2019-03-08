@@ -8,6 +8,7 @@
   position: relative;
   float: left;
   z-index: 1000;
+  transition: 0.5s;
 }
 
 .bg_container {
@@ -152,5 +153,19 @@ path.two {
   }
   100% {
     fill: white;
+  }
+}
+
+/*响应式相关*/
+@media screen and (max-width: 1200px){
+  .container{
+    transition: 0.5s;
+    transform: translateX(-100%);
+  }
+}
+
+@media screen and (max-width: 1150px){
+  .container{
+    display: none;
   }
 }

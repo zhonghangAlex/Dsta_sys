@@ -1,11 +1,11 @@
 <template>
-  <aside class="container">
+  <aside class="container" ref="nav">
     <div class="bg_container">
       <ul class="bg_ul">
         <li class="bg_little" v-for="item in list_count"></li>
       </ul>
     </div>
-    <router-link class="cta" v-for="item in nav_text" :to="item[1]" :key="item">
+    <router-link class="cta" v-for="item in getNavList()" :to="item[1]" :key="item[0]">
       <span>{{item[0]}}</span>
       <span>
           <svg width="43px" height="23px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -24,12 +24,17 @@
   export default {
     data(){
       return {
-        nav_text: [
+        nav_ord: [
           ["数字签名简介", "/introduce"],
           ["哈希算法", "/hashlearn"],
           ["非对称加密算法", "/acalearn"],
           ["数字签名之旅", "/dstalearn"],
           ["我的题库", "/queslearn"]
+        ],
+        nav_sup: [
+          ["题库管理", "/quesmag"],
+          ["学情分析", "/stulearn"],
+          ["学生信息管理", "/stumag"]
         ],
         list_count: []
       }
@@ -41,6 +46,14 @@
       createList:function () {
         let list = new Array(26)
         this.list_count = list
+      },
+      getNavList:function () {
+        if (this.$route.path == '/introduce' || this.$route.path == '/hashlearn' || this.$route.path == '/acalearn' || this.$route.path == '/dstalearn' || this.$route.path == '/queslearn') {
+          return this.nav_ord
+        }else {
+          return this.nav_sup
+        }
+
       }
     }
   }
