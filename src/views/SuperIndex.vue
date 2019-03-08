@@ -14,8 +14,8 @@
 </template>
 
 <script>
-  import SHeader from '@/components/Header'
-  import NavBtn from '@/components/NavBtn'
+  import SHeader from '@/components/base/Header'
+  import NavBtn from '@/components/base/NavBtn'
 
   export default {
     data(){

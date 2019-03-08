@@ -60,6 +60,6 @@
 </script>
 
 <style scoped>
-  @import '../assets/css/nav_btn.css';
+  @import '../../assets/css/nav_btn.css';
 
 </style>

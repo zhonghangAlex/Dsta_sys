@@ -1,11 +1,10 @@
 <template>
-    <div>
-      33333333333333333333333333333333
-    </div>
+    <div></div>
 </template>
 
 <script>
   export default {
+    name: 'QuesLearn'
   }
 </script>
 

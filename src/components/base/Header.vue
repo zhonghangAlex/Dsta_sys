@@ -1,35 +1,35 @@
 <template>
   <header class="header_container">
     <div class="logo_container">
-      <img src="../assets/images/logo.svg" class="header_logo" alt="LOGO"/>
+      <img src="../../assets/images/logo.svg" class="header_logo" alt="LOGO"/>
       <span class="sys_name">{{ sys_name }}</span>
     </div>
 
     <div class="collapse_container">
-      <img src="../assets/images/collage.svg" class="collapse" alt="collapse" ref="collapse" />
+      <img src="../../assets/images/collage.svg" class="collapse" alt="collapse" ref="collapse" />
     </div>
 
     <el-progress v-if="get_progress()" :text-inside="true" :stroke-width="18" :percentage="learn_per" status="success" color="#FBC638" class="stu_progress"></el-progress>
     <!--rgba(142, 113, 199, 0.7)-->
     <div class="userop_container">
       <i class="item_container">
-        <img src="../assets/images/girl_logo.svg" class="user_logo"/>
+        <img src="../../assets/images/girl_logo.svg" class="user_logo"/>
       </i>
       <span class="username">
         {{ userName_sys }}
       </span>
       <ul class="icon_container">
         <li>
-          <img src="../assets/images/download.svg" />
+          <img src="../../assets/images/download.svg" />
         </li>
         <li>
           <el-badge :value="msg_count" class="item">
-            <img class="message_logo" src="../assets/images/notice.svg" />
+            <img class="message_logo" src="../../assets/images/notice.svg" />
           </el-badge>
         </li>
         <li>
           <el-dropdown>
-            <img class="el-dropdown-link" src="../assets/images/user.svg"/>
+            <img class="el-dropdown-link" src="../../assets/images/user.svg"/>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>修改密码</el-dropdown-item>
               <el-dropdown-item>系统帮助</el-dropdown-item>
@@ -44,7 +44,7 @@
       <ul class="icon_container">
         <li>
           <el-dropdown>
-            <img class="el-dropdown-link" src="../assets/images/setting.svg"/>
+            <img class="el-dropdown-link" src="../../assets/images/setting.svg"/>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>{{ userName_sys }}</el-dropdown-item>
               <el-dropdown-item>题库下载</el-dropdown-item>
@@ -117,7 +117,7 @@
 </script>
 
 <style scoped>
-  @import "../assets/css/header.css";
+  @import "../../assets/css/header.css";
   .stu_progress{
     width: 30%;
     position: absolute;

@@ -1,15 +1,14 @@
 <template>
-    <div>
-      44444444444444444444444444444444444444
+    <div class="main_con">
     </div>
 </template>
 
 <script>
   export default {
-    name: 'DstaTrip'
+    name: 'HashLearn'
   }
 </script>
 
 <style scoped>
-
+  @import "../../assets/css/main.css";
 </style>
