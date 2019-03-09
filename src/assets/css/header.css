@@ -1,0 +1,143 @@
+.header_container {
+  z-index: 1002;
+  position: relative;
+  width: 100%;
+  height: 53px;
+  background-color: #fff;
+  border-top: 2px solid #44a0b3;
+  box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.2);
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
+/*LOGO相关样式*/
+.logo_container {
+  position: absolute;
+  float: right;
+}
+
+.header_logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #44a0b3;
+  margin: 6px 0 0 15px;
+}
+
+.sys_name {
+  color: #44a0b3;
+  font-size: 23px;
+  font-family: "Microsoft YaHei UI";
+  font-weight: 900;
+  display: block;
+  position: relative;
+  float: right;
+  margin-left: 20px;
+  height: 55px;
+  line-height: 55px;
+}
+
+/*收缩控制样式*/
+.collapse_container {
+  cursor: pointer;
+  position: absolute;
+  margin-left: 350px;
+  height: 100%;
+}
+
+.collapse {
+  margin-top: 11px;
+}
+
+/*用户相关内容*/
+.userop_container{
+  position: absolute;
+  right: 0;
+  width: 400px;
+  height: 100%;
+}
+
+.userop_container_small{
+  position: absolute;
+  right: 0;
+  width: 100px;
+  height: 53px;
+}
+
+.item_container{
+  width: 53px;
+  height: 53px;
+  display: inline;
+}
+
+.user_logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin:7px 7px;
+}
+
+.username {
+  display: inline;
+  padding: 0 10px;
+  height: 53px;
+  line-height: 53px;
+  position: absolute;
+  float: left;
+  font-family: "Microsoft YaHei UI";
+  font-weight: 800;
+  color: #555;
+}
+
+.icon_container {
+  display: inline;
+  position: absolute;
+  right: 0;
+}
+
+.icon_container li {
+  display: inline-block;
+  float: left;
+  width: 53px;
+  height: 53px;
+  text-align: center;
+  line-height: 53px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.icon_container li img {
+  margin-top: 10px;
+  position: relative;
+}
+
+.message_logo{
+  margin-top: -10px !important;
+}
+
+.icon_container li:hover {
+  transition: 0.5s;
+  background: rgb(236, 246, 247);
+}
+
+.item {
+  margin-top: 10px;
+}
+
+/*响应式相关*/
+@media screen and (max-width: 1200px) {
+  .userop_container{
+    display: none;
+  }
+  .stu_progress{
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .userop_container_small{
+    display: none;
+  }
+}
