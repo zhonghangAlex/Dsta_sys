@@ -1,6 +1,6 @@
-# ds_sys
+# dsta_sys
 
-> This teaching assistant system of digital signature based on Vue
+> This is a teaching assistant platform of digital signature based on Vue
 
 ## Build Setup
 
