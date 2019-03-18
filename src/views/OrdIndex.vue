@@ -77,7 +77,7 @@
   .move-view{
     height: 100%;
     width: 100%;
-    /*position: relative;*/
+    position: relative;
     z-index: 100;
     background-color: #44a0b3;
     /*box-shadow: 2px 2px 0 0 #44444430;*/

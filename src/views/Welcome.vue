@@ -81,7 +81,8 @@
         userRegName: '',
         userRegPassword: '',
         //返回获取
-        userPower: ''
+        userPower: '',
+        userName:''
       }
     },
     mounted() {
@@ -269,6 +270,9 @@
               duration:2000,
               showClose:true
             });
+            _this.userName = res.result.name
+            _this.$cookies.set("username", _this.userName)
+            _this.$store.dispatch("setUserName", res.result.name)
             _this.$router.push("/ordindex")
           }else if(res.status == '0' && res.result.power == '1') {
             _this.$message({
@@ -303,7 +307,7 @@
         let _this = this
         let params = {
           userid: _this.userRegID,
-          username: _this.userRegName,
+          name: _this.userRegName,
           userpassword: _this.userRegPassword
         }
         Register(params).then((response)=>{

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let base = 'http://dsta.zhonghangalex.com/'
+let base = 'http://47.102.204.54:8080/'
 
 //登录接口(post)
 export const Login = params => {
@@ -15,4 +15,9 @@ export const Register = params => {
 //找回密码接口(post)
 export const FindPassword = params => {
   return axios.post(`${base}findpassword`, params)
+}
+
+//退出登录接口(get)
+export const Logout = params => {
+  return axios.get(`${base}logout`, {params : params})
 }
