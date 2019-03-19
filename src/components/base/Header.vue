@@ -16,7 +16,7 @@
         <img src="../../assets/images/girl_logo.svg" class="user_logo"/>
       </i>
       <span class="username">
-        {{ userName_sys }}
+        {{ getUserName }}
       </span>
       <ul class="icon_container">
         <li>
@@ -33,7 +33,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>修改密码</el-dropdown-item>
               <el-dropdown-item>系统帮助</el-dropdown-item>
-              <el-dropdown-item divided>退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="logOut" divided>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </li>
@@ -46,7 +46,7 @@
           <el-dropdown>
             <img class="el-dropdown-link" src="../../assets/images/setting.svg"/>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>{{ userName_sys }}</el-dropdown-item>
+              <el-dropdown-item>{{ getUserName }}</el-dropdown-item>
               <el-dropdown-item>题库下载</el-dropdown-item>
               <el-dropdown-item>
                 <el-badge :value="msg_count" class="item">
@@ -55,7 +55,7 @@
               </el-dropdown-item>
               <el-dropdown-item>系统帮助</el-dropdown-item>
               <el-dropdown-item>修改密码</el-dropdown-item>
-              <el-dropdown-item divided>退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="logOut" divided>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </li>
@@ -66,10 +66,12 @@
 </template>
 
 <script>
+  import { Logout } from "../../api/api";
+
   export default {
     data(){
       return {
-        userName_sys: "zhonghangAlex",
+        // userName_sys: "zhonghangAlex",
         sys_name: "数字签名教学辅助平台",
         //页面配置相关
         page_status: '',
@@ -82,12 +84,20 @@
     created(){
       this.get_progress()
     },
+    mounted(){
+
+    },
     watch:{
       $route: {
         handler: function (newpath, oldpath) {
           this.get_progress()
         },
         deep: true
+      }
+    },
+    computed:{
+      getUserName: function () {
+        return this.$store.getters.getUserNameFn
       }
     },
     methods:{
@@ -111,6 +121,17 @@
         }else {
           return false
         }
+      },
+      logOut:function () {
+        this.$confirm('确定退出登录？').then(()=>{
+          let params = {}
+          Logout(params).then(()=>{
+
+          })
+          this.$router.push("/welcome")
+          done();
+        })
+
       }
     }
   }

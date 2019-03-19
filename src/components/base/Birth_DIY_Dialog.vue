@@ -50,6 +50,11 @@
         }
         let p = 1 - anti_p
         _this.diy_result = (p * 100).toFixed(2)
+        _this.$notify({
+          title: '完成计算',
+          message: _this.class_num + '人的班级中，生日碰撞的概率为：' + _this.diy_result + '%',
+          type: 'success'
+        });
       }
     }
   }

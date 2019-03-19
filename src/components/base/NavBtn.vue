@@ -2,7 +2,7 @@
   <aside class="container" ref="nav">
     <div class="bg_container">
       <ul class="bg_ul">
-        <li class="bg_little" v-for="item in list_count"></li>
+        <li class="bg_little" v-for="(item, index) in list_count" :key="index"></li>
       </ul>
     </div>
     <router-link class="cta" v-for="item in getNavList()" :to="item[1]" :key="item[0]">

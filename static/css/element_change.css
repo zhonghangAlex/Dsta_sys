@@ -1,0 +1,4 @@
+/* 学生界面哈希算法，时间轴默认样式 */
+.el-timeline-item__timestamp {
+    color: #f5f5f5 !important;
+}
