@@ -93,14 +93,14 @@
   padding: 5px 10px 20px 10px;
 }
 
-.birth_title, .hash_title{
+.birth_title, .hash_title {
   display: block;
   position: absolute;
   height: 30px;
   line-height: 30px;
   background-color: #44a0b3;
   border-radius: 30px;
-  padding:0 15px;
+  padding: 0 15px;
   color: #f5f5f5;
 }
 
@@ -158,9 +158,10 @@
   justify-content: center;
 }
 
-.tag_con .el-tag{
+.tag_con .el-tag {
   margin: 0 20px;
 }
+
 /* 右边2号卡片内容 */
 .hash_con {
   /* width: calc(100% - 290px); */
@@ -196,7 +197,7 @@
   text-align: center;
 }
 
-.hash_text{
+.hash_text {
   line-height: 25px;
   height: 290px;
   overflow-y: auto;
@@ -214,8 +215,39 @@
 
 .half_hash_input {
   width: 88%;
-  margin: 0 auto;
   left: 10%;
 }
 
 /* 右边3号卡片内容 */
+.hash_d, .hash_n {
+  width: 80%;
+  left: 10%;
+}
+
+/*右边4号卡片内容*/
+.func_con {
+  height: 100%;
+  width: 100%;
+}
+
+.dataset_con {
+  /*height: 290px;*/
+  /*!*width: 100%;*!*/
+  /*overflow-y: auto;*/
+  margin-top: 10px;
+  text-align: center;
+}
+
+.func_content_con {
+  height: 290px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.hash_func_desc {
+  width: 28%;
+  float: left;
+  height: 290px;
+  background-color: red;
+  overflow-y: auto;
+}
