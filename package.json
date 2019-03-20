@@ -1,6 +1,6 @@
 {
   "name": "dsta_sys",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "This is a teaching assistant platform of digital signature based on Vue",
   "author": "zhonghangAlex <715608270@qq.com>",
   "private": true,

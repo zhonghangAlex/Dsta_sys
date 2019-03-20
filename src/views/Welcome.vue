@@ -307,7 +307,7 @@
         let _this = this
         let params = {
           userid: _this.userRegID,
-          name: _this.userRegName,
+          username: _this.userRegName,
           userpassword: _this.userRegPassword
         }
         Register(params).then((response)=>{

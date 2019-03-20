@@ -129,7 +129,6 @@
 
           })
           this.$router.push("/welcome")
-          done();
         })
 
       }
