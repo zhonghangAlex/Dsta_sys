@@ -248,6 +248,23 @@
   width: 28%;
   float: left;
   height: 290px;
-  background-color: red;
   overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
+
+.hashcalc_start {
+  margin: 0 auto;
+  display: block;
+}
+
+.mini_input {
+  width: 100%;
+}
+
+.mini_btn {
+  width: 35px;
+  padding: 10px 10px;
+}
+

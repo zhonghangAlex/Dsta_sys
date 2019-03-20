@@ -183,7 +183,7 @@
                         noChecked: '${total}',
                         hasChecked: '${checked}/${total}'
                       }"
-                    @change="handleChange"
+                    @change="data_source_change"
                     :data="data">
                     <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
                     <el-button class="transfer-footer" slot="left-footer" size="small">新增自定义数据</el-button>
@@ -201,24 +201,44 @@
                 <el-tab-pane label="直接定址法">
                   <div class="func_content_con">
                     <div class="hash_func_desc">
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;直接定址法是指取关键字或关键字的某个线性函数值为散列地址。</p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = a*key + b</span>，其中<span style='color: #f56c6c; font-weight: 800'>a</span>和<span style='color: #f56c6c; font-weight: 800'>b</span>为常数。</p>
+                      <p style="font-size: 12px;">H(key) =
+                        <el-popover placement="top" width="200" v-model="hash_one_a_inp">
+                          <el-input size="small" class="mini_input" v-model="hash_one_a" placeholder="请输入a的取值"></el-input>
+                          <div style="text-align: right; margin: 0">
+                            <el-button type="text" size="mini" @click="hash_one_a_inp = false">设置完毕</el-button>
+                          </div>
+                          <el-button slot="reference" size="mini" class="mini_btn">a</el-button>
+                        </el-popover>
 
+                        *key +
+                        <el-popover placement="top" width="200" v-model="hash_one_b_inp">
+                          <el-input size="small" class="mini_input" v-model="hash_one_b" placeholder="请输入b的取值"></el-input>
+                          <div style="text-align: right; margin: 0">
+                            <el-button type="text" size="mini" @click="hash_one_b_inp = false">设置完毕</el-button>
+                          </div>
+                          <el-button slot="reference" size="mini" class="mini_btn">b</el-button>
+                        </el-popover><br>
+                      <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
                     </div>
                     <el-table
                       max-height="280"
                       :stripe= true
                       size="mini"
                       :data="tableData"
+                      :cell-style="ele_table_style"
                       border
                       style="width: 70%; float: right;">
                       <el-table-column
                         align="center"
-                        prop="date"
+                        prop="no_num"
                         label="学号"
                         min-width="130">
                       </el-table-column>
                       <el-table-column
                         align="center"
-                        prop="date"
+                        prop="hash_calc"
                         label="哈希运算"
                         min-width="130">
                       </el-table-column>
@@ -230,7 +250,7 @@
                       </el-table-column>
                       <el-table-column
                         align="center"
-                        prop="address"
+                        prop="hash_val"
                         label="哈希值"
                         max-width="80">
                       </el-table-column>
@@ -255,6 +275,7 @@
 <script>
   export default {
     data() {
+      // 数据源
       const generateData = _ => {
         const data = []
         const hash_methods = ["直接定址法", "除留取余法", "数字分析法", "平方取中法", "位移叠加法"]
@@ -289,6 +310,8 @@
         hash_extra3: false,
         hash_extra4: false,
         hash_dataset: false,
+        hash_one_a_inp:false,
+        hash_one_b_inp:false,
         hash_range: '',
         hashhalf_result: '',
         hash_d: '',
@@ -299,41 +322,19 @@
         // hash函数方法——数据源设置
         data: generateData(),
         hash_data_use: ['直接定址法1', '直接定址法2', '直接定址法3', '直接定址法4', '直接定址法5', '直接定址法6', '直接定址法7', '直接定址法8'],
-        // hash函数方法——直接定制法数据
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '111'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '112'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '113'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '114'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '115'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '116'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '117'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '118'
-        }]
+        // hash函数方法——直接定址法数据
+        random_name: ['李钟航', '石雨昂', '郑明明', '刘胜', '林予晗', '刘宇星', '王思聪', '张大仙', '铁拐李'],
+        tableData: [],
+        cur_table_row: 0,
+        hash_one_a: '1',
+        hash_one_b: '-121603490110'
       }
+    },
+    updated() {
+      this.init_hash_table()
+    },
+    mounted() {
+      this.init_hash_table()
     },
     methods: {
       get_hashhalf_result: function () {
@@ -388,8 +389,60 @@
           });
         }
       },
-      handleChange(value, direction, movedKeys) {
-        console.log(value, direction, movedKeys);
+      // 初始化运算表格
+      init_hash_table:function () {
+        let _this = this
+        for (let i = 0; i < _this.hash_data_use.length; i++) {
+          for (let j = 0; j < _this.data.length; j++) {
+            if (_this.data[j].key === _this.hash_data_use[i] ) {
+              _this.tableData[i] = {
+                no_num: _this.data[j].label,
+                hash_calc: '',
+                name: _this.random_name[i],
+                hash_val: ''
+              }
+            }
+          }
+        }
+      },
+      // 表格样式
+      ele_table_style:function ({row, column, rowIndex, columnIndex}) {
+        if (columnIndex === 1 || columnIndex === 3)
+        return 'color: #f56c6c; font-weight: 800'
+      },
+      // 哈希运算主函数
+      start_hash:function () {
+        let _this = this
+        let count = _this.cur_table_row
+
+        if (_this.cur_table_row >= _this.hash_data_use.length) {
+          _this.$notify({
+            title: '操作警告',
+            message: '所有数据已经计算完毕！',
+            type: 'warning'
+          });
+        } else {
+          let hash_calc_fn = _this.hash_one_a + '*' +_this.tableData[count].no_num + '+' + '(' + _this.hash_one_b +')'
+          let hash_val_fn =  parseInt(_this.hash_one_a) * parseInt(_this.tableData[count].no_num) +  parseInt(_this.hash_one_b)
+          _this.tableData[count].hash_calc = hash_calc_fn
+          _this.tableData[count].hash_val = hash_val_fn
+          console.log(_this.tableData[count].hash_calc);
+          console.log(_this.tableData[count].hash_val);
+          _this.$notify({
+            title: '完成一项计算',
+            message: '第' + (count + 1) + '项数据计算完毕！',
+            type: 'success'
+          });
+          _this.cur_table_row += 1
+        }
+      },
+      // 数据源设定时右边的数据改变
+      data_source_change(value, direction, movedKeys) {
+        // console.log(value, direction, movedKeys);
+        // console.log(this.hash_data_use);
+        this.tableData = []
+        this.cur_table_row = 0
+        this.init_hash_table()
       }
     }
   }
