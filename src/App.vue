@@ -13,7 +13,6 @@ export default {
 </script>
 
 <style>
-  @import "../static/css/reset.css";
   body {
     margin: 0;
     padding: 0;
@@ -21,5 +20,6 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    font-family:"微软雅黑";
   }
 </style>
