@@ -159,15 +159,17 @@
               <el-button style="float: right; margin-left: 10px;" type="primary" size="small">完成阅读</el-button>
 
               <el-popover placement="top" width="260" v-model="hash_extra4">
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;防止哈希碰撞的最有效方法，就是扩大哈希值的取值空间。</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16个二进制位的哈希值，产生碰撞的可能性是 65536
-                  分之一。也就是说，如果有65537个用户，就一定会产生碰撞。哈希值的长度扩大到32个二进制位，碰撞的可能性就会下降到 4,294,967,296 分之一。</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更长的哈希值意味着更大的存储空间、更多的计算，将影响性能和成本。开发者必须做出抉择，在安全与成本之间找到平衡。</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无论哈希函数设计有多么精细，都会产生冲突现象，也就是2个关键字处理函数的结果映射在了同一位置上，因此，有一些方法可以避免冲突。</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拉链法:拉出一个动态链表代替静态顺序存储结构，可以避免哈希函数的冲突，不过缺点就是链表的设计过于麻烦，增加了编程复杂度。此法可以完全避免哈希函数的冲突。</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多哈希法:设计二种甚至多种哈希函数，可以避免冲突，但是冲突几率还是有的，函数设计的越好或越多都可以将几率降到最低（除非人品太差，否则几乎不可能冲突）。</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开放地址法:开放地址法有一个公式：Hi=(H(key)+di) MOD m i=1,2,...,k(k<=m-1）其中，m为哈希表的表长。di 是产生冲突的时候的增量序列。如果di值可能为1,2,3,...m-1，称线性探测再散列。 如果di取1，则每次冲突之后，向后移动1个位置.如果di取值可能为1,-1,4,-4,9,-9,16,-16,...k*k,-k*k(k<=m/2） 称二次探测再散列。如果di取值可能为伪随机数列。称伪随机探测再散列。</p>
                 <div style="text-align: right; margin: 0">
                   <el-button type="text" size="mini" @click="hash_extra4 = false">了解完毕</el-button>
                 </div>
                 <el-button slot="reference" style="float: right;" type="primary" size="small" plain>知识拓展</el-button>
               </el-popover>
+
+              <el-button style="float: right; margin-right: 10px;" type="primary" size="small" @click="hash_clear">清空运算</el-button>
 
               <el-popover placement="top" width="750" v-model="hash_dataset">
                 <div class="dataset_con">
@@ -197,13 +199,14 @@
               </el-popover>
             </div>
             <div class="hash_text">
-              <el-tabs tab-position="left" class="func_con">
+              <el-tabs tab-position="left" class="func_con" @tab-click="change_hash_method">
                 <el-tab-pane label="直接定址法">
                   <div class="func_content_con">
                     <div class="hash_func_desc">
                       <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;直接定址法是指取关键字或关键字的某个线性函数值为散列地址。</p>
                       <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = a*key + b</span>，其中<span style='color: #f56c6c; font-weight: 800'>a</span>和<span style='color: #f56c6c; font-weight: 800'>b</span>为常数。</p>
-                      <p style="font-size: 12px;">H(key) =
+                      <p style="font-size: 12px;">
+                        H(key) =
                         <el-popover placement="top" width="200" v-model="hash_one_a_inp">
                           <el-input size="small" class="mini_input" v-model="hash_one_a" placeholder="请输入a的取值"></el-input>
                           <div style="text-align: right; margin: 0">
@@ -219,7 +222,8 @@
                             <el-button type="text" size="mini" @click="hash_one_b_inp = false">设置完毕</el-button>
                           </div>
                           <el-button slot="reference" size="mini" class="mini_btn">b</el-button>
-                        </el-popover><br>
+                        </el-popover>
+                      </p><br>
                       <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
                     </div>
                     <el-table
@@ -257,10 +261,214 @@
                     </el-table>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="除留取余法">除留取余法</el-tab-pane>
-                <el-tab-pane label="数字分析法">数字分析法</el-tab-pane>
-                <el-tab-pane label="平方取中法">平方取中法</el-tab-pane>
-                <el-tab-pane label="位移叠加法">位移叠加法</el-tab-pane>
+                <el-tab-pane label="除留取余法">
+                  <div class="func_content_con">
+                    <div class="hash_func_desc">
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p style="font-size: 12px; text-align: center;">
+                        H(key) = key %
+                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
+                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
+                          <div style="text-align: right; margin: 0">
+                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
+                          </div>
+                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
+                        </el-popover>
+                      </p><br>
+                      <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
+                    </div>
+                    <el-table
+                      max-height="280"
+                      :stripe= true
+                      size="mini"
+                      :data="tableData"
+                      :cell-style="ele_table_style"
+                      border
+                      style="width: 70%; float: right;">
+                      <el-table-column
+                        align="center"
+                        prop="no_num"
+                        label="学号"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_calc"
+                        label="哈希运算"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="name"
+                        label="姓名"
+                        width="70">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_val"
+                        label="哈希值"
+                        max-width="80">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="数字分析法">
+                  <div class="func_content_con">
+                    <div class="hash_func_desc">
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p style="font-size: 12px; text-align: center;">
+                        H(key) = key %
+                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
+                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
+                          <div style="text-align: right; margin: 0">
+                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
+                          </div>
+                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
+                        </el-popover>
+                      </p><br>
+                      <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
+                    </div>
+                    <el-table
+                      max-height="280"
+                      :stripe= true
+                      size="mini"
+                      :data="tableData"
+                      :cell-style="ele_table_style"
+                      border
+                      style="width: 70%; float: right;">
+                      <el-table-column
+                        align="center"
+                        prop="no_num"
+                        label="学号"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_calc"
+                        label="哈希运算"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="name"
+                        label="姓名"
+                        width="70">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_val"
+                        label="哈希值"
+                        max-width="80">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="平方取中法">
+                  <div class="func_content_con">
+                    <div class="hash_func_desc">
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p style="font-size: 12px; text-align: center;">
+                        H(key) = key %
+                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
+                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
+                          <div style="text-align: right; margin: 0">
+                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
+                          </div>
+                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
+                        </el-popover>
+                      </p><br>
+                      <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
+                    </div>
+                    <el-table
+                      max-height="280"
+                      :stripe= true
+                      size="mini"
+                      :data="tableData"
+                      :cell-style="ele_table_style"
+                      border
+                      style="width: 70%; float: right;">
+                      <el-table-column
+                        align="center"
+                        prop="no_num"
+                        label="学号"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_calc"
+                        label="哈希运算"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="name"
+                        label="姓名"
+                        width="70">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_val"
+                        label="哈希值"
+                        max-width="80">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="位移叠加法">
+                  <div class="func_content_con">
+                    <div class="hash_func_desc">
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p style="font-size: 12px; text-align: center;">
+                        H(key) = key %
+                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
+                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
+                          <div style="text-align: right; margin: 0">
+                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
+                          </div>
+                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
+                        </el-popover>
+                      </p><br>
+                      <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
+                    </div>
+                    <el-table
+                      max-height="280"
+                      :stripe= true
+                      size="mini"
+                      :data="tableData"
+                      :cell-style="ele_table_style"
+                      border
+                      style="width: 70%; float: right;">
+                      <el-table-column
+                        align="center"
+                        prop="no_num"
+                        label="学号"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_calc"
+                        label="哈希运算"
+                        min-width="130">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="name"
+                        label="姓名"
+                        width="70">
+                      </el-table-column>
+                      <el-table-column
+                        align="center"
+                        prop="hash_val"
+                        label="哈希值"
+                        max-width="80">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </el-tab-pane>
               </el-tabs>
             </div>
           </el-card>
@@ -283,7 +491,7 @@
           for (let j = 1; j <= 8; j++) {
             data.push({
               key: hash_methods[i] + j,
-              label: `012160349011${ j }`,
+              label: `012160349011${ i * 8 + j }`,
               disabled: false
             });
           }
@@ -312,6 +520,7 @@
         hash_dataset: false,
         hash_one_a_inp:false,
         hash_one_b_inp:false,
+        hash_two_p_inp: false,
         hash_range: '',
         hashhalf_result: '',
         hash_d: '',
@@ -322,21 +531,32 @@
         // hash函数方法——数据源设置
         data: generateData(),
         hash_data_use: ['直接定址法1', '直接定址法2', '直接定址法3', '直接定址法4', '直接定址法5', '直接定址法6', '直接定址法7', '直接定址法8'],
+        hash_data_all: [
+          ['直接定址法1', '直接定址法2', '直接定址法3', '直接定址法4', '直接定址法5', '直接定址法6', '直接定址法7', '直接定址法8'],
+          ['除留取余法1', '除留取余法2', '除留取余法3', '除留取余法4', '除留取余法5', '除留取余法6', '除留取余法7', '除留取余法8'],
+          ['数字分析法1', '数字分析法2', '数字分析法3', '数字分析法4', '数字分析法5', '数字分析法6', '数字分析法7', '数字分析法8'],
+          ['平方取中法1', '平方取中法2', '平方取中法3', '平方取中法4', '平方取中法5', '平方取中法6', '平方取中法7', '平方取中法8'],
+          ['位移叠加法1', '位移叠加法2', '位移叠加法3', '位移叠加法4', '位移叠加法5', '位移叠加法6', '位移叠加法7', '位移叠加法8']
+        ],
+        // 用户位置
+        index: '0',
         // hash函数方法——直接定址法数据
         random_name: ['李钟航', '石雨昂', '郑明明', '刘胜', '林予晗', '刘宇星', '王思聪', '张大仙', '铁拐李'],
         tableData: [],
         cur_table_row: 0,
+        // 参数
         hash_one_a: '1',
-        hash_one_b: '-121603490110'
+        hash_one_b: '-121603490110',
+
+        // hash函数方法——除留取余法
+        hash_two_p: '5'
       }
-    },
-    updated() {
-      this.init_hash_table()
     },
     mounted() {
       this.init_hash_table()
     },
     methods: {
+      // 写死的知识卡片函数 2-1
       get_hashhalf_result: function () {
         let _this = this
         if (_this.hash_range) {
@@ -355,6 +575,7 @@
           });
         }
       },
+      // 写死的知识卡片函数 3-1
       get_hashp_result: function () {
         let _this = this
         if (_this.hash_d && _this.hash_n) {
@@ -373,6 +594,7 @@
           });
         }
       },
+      // 写死的知识卡片函数 3-2
       get_hashapi_result:function () {
         let _this = this
         if (_this.hash_api === '22'){
@@ -389,6 +611,7 @@
           });
         }
       },
+
       // 初始化运算表格
       init_hash_table:function () {
         let _this = this
@@ -410,11 +633,11 @@
         if (columnIndex === 1 || columnIndex === 3)
         return 'color: #f56c6c; font-weight: 800'
       },
+
       // 哈希运算主函数
       start_hash:function () {
         let _this = this
-        let count = _this.cur_table_row
-
+        console.log(_this.index);
         if (_this.cur_table_row >= _this.hash_data_use.length) {
           _this.$notify({
             title: '操作警告',
@@ -422,27 +645,123 @@
             type: 'warning'
           });
         } else {
-          let hash_calc_fn = _this.hash_one_a + '*' +_this.tableData[count].no_num + '+' + '(' + _this.hash_one_b +')'
-          let hash_val_fn =  parseInt(_this.hash_one_a) * parseInt(_this.tableData[count].no_num) +  parseInt(_this.hash_one_b)
-          _this.tableData[count].hash_calc = hash_calc_fn
-          _this.tableData[count].hash_val = hash_val_fn
-          console.log(_this.tableData[count].hash_calc);
-          console.log(_this.tableData[count].hash_val);
+          switch (_this.index) {
+            case '0':
+              _this.hash_one_main()
+              break;
+            case '1':
+              _this.hash_two_main()
+              break;
+            case '2':
+              _this.hash_three_main()
+              break;
+            case '3':
+              _this.hash_four_main()
+              break;
+            case '4':
+              _this.hash_five_main()
+              break;
+          }
+
           _this.$notify({
             title: '完成一项计算',
-            message: '第' + (count + 1) + '项数据计算完毕！',
+            message: '第' + (_this.cur_table_row + 1) + '项数据计算完毕！',
             type: 'success'
           });
           _this.cur_table_row += 1
         }
       },
+
+      // 哈希运算——直接定址法
+      hash_one_main:function() {
+        let _this = this
+        let count = _this.cur_table_row
+        let tableData_temp = []
+        let row = _this.tableData[count]
+        // 方案1
+        // for (let i = 0; i < _this.hash_data_use.length; i++) {
+        //   for (let j = 0; j < _this.data.length; j++) {
+        //     if (_this.data[j].key === _this.hash_data_use[i] ) {
+        //       tableData_temp[i] = {
+        //         no_num: _this.data[j].label,
+        //         hash_calc: (i <= count) ? _this.hash_one_a + '*' +_this.data[j].label + '+' + '(' + _this.hash_one_b +')' : '',
+        //         name: _this.random_name[i],
+        //         hash_val: (i <= count) ? parseInt(_this.hash_one_a) * parseInt(_this.data[j].label) +  parseInt(_this.hash_one_b) : ''
+        //       }
+        //     }
+        //   }
+        // }a
+        // _this.tableData = []
+        // _this.$nextTick(()=>{
+        //   _this.tableData = tableData_temp
+        // })
+
+        // 方案2 精简版本
+        let hash_calc_fn = _this.hash_one_a + '*' +_this.data[count].label + '+' + '(' + _this.hash_one_b +')'
+        let hash_val_fn = parseInt(_this.hash_one_a) * parseInt(_this.data[count].label) +  parseInt(_this.hash_one_b)
+        row.hash_calc = hash_calc_fn
+        row.hash_val = hash_val_fn
+        _this.$set(_this.tableData, count, row)
+      },
+
+      // 哈希运算——除留取与法
+      hash_two_main:function() {
+        let _this = this
+        let count = _this.cur_table_row
+        let tableData_temp = []
+        let row = _this.tableData[count]
+
+        let hash_calc_fn = _this.data[count].label + ' % ' + _this.hash_two_p
+        let hash_val_fn =  parseInt(_this.data[count].label) %  parseInt(_this.hash_two_p)
+        row.hash_calc = hash_calc_fn
+        row.hash_val = hash_val_fn
+        _this.$set(_this.tableData, count, row)
+      },
+
+      // 哈希运算——数字分析法
+      hash_three_main:function() {
+        return
+      },
+
+      // 哈希运算——平方取中法
+      hash_four_main:function() {
+        return
+      },
+
+      // 哈希运算——位移叠加法
+      hash_five_main:function() {
+        return
+      },
+
       // 数据源设定时右边的数据改变
-      data_source_change(value, direction, movedKeys) {
+      data_source_change:function(value, direction, movedKeys) {
         // console.log(value, direction, movedKeys);
         // console.log(this.hash_data_use);
         this.tableData = []
         this.cur_table_row = 0
         this.init_hash_table()
+      },
+
+      // 哈希函数选项卡切换事件
+      change_hash_method:function(tab, event) {
+        let _this = this
+        _this.index = tab.index
+        _this.tableData = []
+        _this.cur_table_row = 0
+        _this.hash_data_use = _this.hash_data_all[tab.index]
+        _this.init_hash_table()
+      },
+
+      // 清空面板的运算数据
+      hash_clear:function () {
+        this.tableData = []
+        this.cur_table_row = 0
+        this.init_hash_table()
+        this.$notify({
+          title: '操作提醒',
+          message: '你已清空Hash表格所有的运算数据',
+          type: 'warning'
+        });
       }
     }
   }
