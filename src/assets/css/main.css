@@ -268,9 +268,16 @@
   padding: 10px 10px;
 }
 
-.anly_pic {
-  border-radius: 3px;
+.anly_pic{
+  border-radius: 5px;
+  width: 120px;
   display: block;
   margin: 0 auto;
 }
+.pow_pic, .coll_pic {
+  border-radius: 5px;
+  display: block;
+  margin: 0 auto;
+}
+
 

@@ -188,7 +188,7 @@
                     @change="data_source_change"
                     :data="data">
                     <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
-                    <el-button class="transfer-footer" slot="left-footer" size="small">新增自定义数据</el-button>
+                    <el-button class="transfer-footer" slot="left-footer" size="small" @click.native="add_data_vis = true">新增自定义数据</el-button>
                     <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
                   </el-transfer>
                 </div>
@@ -361,18 +361,11 @@
                 <el-tab-pane label="平方取中法">
                   <div class="func_content_con">
                     <div class="hash_func_desc">
-                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
-                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;先计算出关键字值的平方，然后取平方值中间几位作为散列地址。</p>
+                      <p><img class="pow_pic" src="../../assets/images/hash_pow.png" /></p>
                       <p style="font-size: 12px; text-align: center;">
-                        H(key) = key %
-                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
-                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
-                          <div style="text-align: right; margin: 0">
-                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
-                          </div>
-                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
-                        </el-popover>
-                      </p><br>
+                        <el-input class="hash_center" v-model="hash_center" placeholder="请输入取中的位数"></el-input>
+                      </p>
                       <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
                     </div>
                     <el-table
@@ -413,18 +406,11 @@
                 <el-tab-pane label="位移叠加法">
                   <div class="func_content_con">
                     <div class="hash_func_desc">
-                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
-                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将关键字分为位数相同的几部分，然后取这几部分的叠加和（舍去进位）作为散列地址。</p>
+                      <p><img class="coll_pic" src="../../assets/images/hash_coll.png" /></p>
                       <p style="font-size: 12px; text-align: center;">
-                        H(key) = key %
-                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
-                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
-                          <div style="text-align: right; margin: 0">
-                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
-                          </div>
-                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
-                        </el-popover>
-                      </p><br>
+                        <el-input class="hash_coll" v-model="hash_coll" placeholder="请输入折叠结点数"></el-input>
+                      </p>
                       <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
                     </div>
                     <el-table
@@ -470,6 +456,48 @@
       </el-row>
 
     </div>
+
+    <el-dialog
+      title="新增自定义数据"
+      :visible.sync="add_data_vis"
+      :append-to-body='true'
+      width="30%">
+      <el-form :model="add_data" ref="add_data" label-width="100px" class="demo-ruleForm">
+        <el-form-item
+          label="新增关键字"
+          prop="key"
+          :rules="[
+            { required: true, message: '关键字不能为空'}
+          ]"
+        >
+          <el-input v-model="add_data.key" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="新增数值"
+          prop="label"
+          :rules="[
+            { required: true, message: '数值不能为空'},
+            { type: 'number', message: '必须为数值类型'}
+          ]"
+        >
+          <el-input v-model="add_data.label" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="是否可用"
+          prop="disabled"
+        >
+          <el-switch
+            v-model="add_data.disabled" autocomplete="off"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="resetForm('add_data_sub')">重置</el-button>
+          <el-button type="primary" @click="add_data_sub('add_data')">提交</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -510,6 +538,7 @@
         hash_extra2: false,
         hash_extra3: false,
         hash_extra4: false,
+        add_data_vis: false,
         hash_dataset: false,
         hash_one_a_inp:false,
         hash_one_b_inp:false,
@@ -523,6 +552,11 @@
         // hash函数方法相关
         // hash函数方法——数据源设置
         data: generateData(),
+        add_data:{
+          key: '',
+          label: '',
+          disabled: false
+        },
         hash_data_use: ['直接定址法1', '直接定址法2', '直接定址法3', '直接定址法4', '直接定址法5', '直接定址法6', '直接定址法7', '直接定址法8'],
         hash_data_all: [
           ['直接定址法1', '直接定址法2', '直接定址法3', '直接定址法4', '直接定址法5', '直接定址法6', '直接定址法7', '直接定址法8'],
@@ -545,7 +579,13 @@
         hash_two_p: '5',
 
         // hash函数方法——数字分析法
-        hash_wei: ''
+        hash_wei: '',
+
+        // hash函数方法——平方取中法
+        hash_center: '',
+
+        // hash函数方法——位移折叠法
+        hash_coll: ''
       }
     },
     mounted() {
@@ -624,6 +664,21 @@
           }
         }
       },
+
+      // 处理添加自定义数据
+      add_data_sub(formName) {
+        let _this = this
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            _this.data.push(_this.add_data)
+          } else {
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
       // 表格样式
       ele_table_style:function ({row, column, rowIndex, columnIndex}) {
         if (columnIndex === 1 || columnIndex === 3)
@@ -665,12 +720,14 @@
               }
               break;
             case '3':
-              _this.hash_four_main()
-              _this.notice_msg()
+              if (_this.hash_four_main()) {
+                _this.notice_msg()
+              }
               break;
             case '4':
-              _this.hash_five_main()
-              _this.notice_msg()
+              if (_this.hash_five_main()) {
+                _this.notice_msg()
+              }
               break;
           }
         }
@@ -680,7 +737,6 @@
       hash_one_main:function() {
         let _this = this
         let count = _this.cur_table_row
-        let tableData_temp = []
         let row = _this.tableData[count]
         // 方案1
         // for (let i = 0; i < _this.hash_data_use.length; i++) {
@@ -712,7 +768,6 @@
       hash_two_main:function() {
         let _this = this
         let count = _this.cur_table_row
-        let tableData_temp = []
         let row = _this.tableData[count]
 
         let hash_calc_fn = row.no_num + ' % ' + _this.hash_two_p
@@ -726,7 +781,6 @@
       hash_three_main:function() {
         let _this = this
         let count = _this.cur_table_row
-        let tableData_temp = []
         let row = _this.tableData[count]
         let hash_calc_wei = _this.get_anly_result()
         let hash_calc_fn = ''
@@ -744,7 +798,7 @@
         }else {
           _this.$notify({
             title: '操作错误',
-            message: '您输入的数据格式有误',
+            message: '您输入的数据格式有误, 请输入适当大小的非零数字，且使用逗号隔开，例如：1,2,3,4',
             type: 'error'
           });
           return false
@@ -775,7 +829,7 @@
       // 检查数据格式
       justify_num:function(arr) {
         let _this = this
-        let reg = /^[0-9]+\.?[0-9]*$/
+        let reg = /^[1-9]+\.?[1-9]*$/
         for(let i = 0; i < arr.length; i++) {
           if (reg.test(arr[i]) && arr[i] <= _this.tableData[_this.cur_table_row].no_num.length){
 
@@ -787,12 +841,66 @@
       },
       // 哈希运算——平方取中法
       hash_four_main:function() {
-        return
+        let _this = this
+        let count = _this.cur_table_row
+        let row = _this.tableData[count]
+        let hash_calc_fn = ''
+        let hash_val_fn = ''
+        let start_wei  = 0
+        let end_wei = 0
+        let reg = /^[0-9]+\.?[0-9]*$/
+        if( _this.hash_center && _this.hash_center != 0 && reg.test(_this.hash_center) && parseInt(_this.hash_center) <= Math.pow(parseInt(row.no_num), 2).toString().length){
+          start_wei = parseInt(((Math.pow(parseInt(row.no_num), 2).toString().length - _this.hash_center) / 2)) + 1
+          end_wei = start_wei + parseInt(_this.hash_center) - 1
+          hash_calc_fn = '(' + row.no_num + ')²' + '%' + Math.pow(10, end_wei) + '÷' + Math.pow(10, start_wei - 1)
+          hash_val_fn = parseInt(Math.pow(parseInt(row.no_num), 2) % Math.pow(10, end_wei) / Math.pow(10, start_wei - 1))
+          console.log(Math.pow(parseInt(row.no_num), 2));
+          row.hash_calc = hash_calc_fn
+          row.hash_val = hash_val_fn
+          _this.$set(_this.tableData, count, row)
+          return true
+        } else {
+          _this.$notify({
+            title: '操作错误',
+            message: '您输入的数据格式有误，请输入适当大小的非零数字',
+            type: 'error'
+          });
+          return false
+        }
       },
 
       // 哈希运算——位移叠加法
       hash_five_main:function() {
-        return
+        let _this = this
+        let count = _this.cur_table_row
+        let row = _this.tableData[count]
+        let hash_calc_fn = ''
+        let hash_val_fn = 0
+        let start_wei  = 0
+        let end_wei = 0
+        let state_num = 0
+        if (_this.hash_coll && _this.hash_coll != 0 && _this.hash_coll <= row.no_num.length) {
+          let coll_count = row.no_num.length%_this.hash_coll ? parseInt(row.no_num.length / _this.hash_coll) + 1 : row.no_num.length / _this.hash_coll
+          for (let i = 0; i < coll_count; i++) {
+            start_wei = i * _this.hash_coll + 1
+            end_wei = (i + 1) * _this.hash_coll
+            state_num = parseInt(parseInt(row.no_num) % Math.pow(10, end_wei) / Math.pow(10, start_wei - 1))
+            hash_val_fn = hash_val_fn + state_num
+            hash_calc_fn = hash_calc_fn + '+' + state_num
+          }
+          hash_calc_fn = hash_calc_fn.substr(1)
+          row.hash_calc = hash_calc_fn
+          row.hash_val = hash_val_fn
+          _this.$set(_this.tableData, count, row)
+          return true
+        } else {
+          _this.$notify({
+            title: '操作错误',
+            message: '您输入的数据格式有误,请输入非零数字，且小于所计算的数字长度',
+            type: 'error'
+          });
+          return false
+        }
       },
 
       // 数据源设定时右边的数据改变
@@ -811,6 +919,8 @@
         _this.tableData = []
         _this.cur_table_row = 0
         _this.hash_wei = ''
+        _this.hash_center = ''
+        _this.hash_coll = ''
         _this.hash_data_use = _this.hash_data_all[tab.index]
         _this.init_hash_table()
       },
@@ -820,6 +930,8 @@
         this.tableData = []
         this.cur_table_row = 0
         this.hash_wei = ''
+        this.hash_center = ''
+        this.hash_coll = ''
         this.init_hash_table()
         this.$notify({
           title: '操作提醒',

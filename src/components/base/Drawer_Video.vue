@@ -2,6 +2,7 @@
   <el-dialog
     title="数字签名教学视频"
     :visible.sync="dialogVisible"
+    :append-to-body='true'
     width="70%"
     class="video_con"
     :before-close="handleClose">
@@ -28,7 +29,7 @@
             sources: [{
               type: "video/mp4",
               // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
-              src: "/static/video/total_video.mp4"
+              src: "http://47.102.204.54:8080/total_video.mp4"
             }],
             poster: "/static/images/video_bg.jpg", //你的封面地址
             width: document.documentElement.clientWidth,

@@ -3,6 +3,7 @@
     title="生日问题自定义计算"
     :visible.sync="dialogVisible"
     width="30%"
+    :append-to-body='true'
     :before-close="handleClose">
       <span class="dia_text">你可以在下方输入学生数，系统会自动计算出P值：</span>
       <span class="dia_text">
