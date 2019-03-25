@@ -316,7 +316,7 @@
                 <el-tab-pane label="数字分析法">
                   <div class="func_content_con">
                     <div class="hash_func_desc">
-                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。</p>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当关键字的位数大于地址的位数，对关键字的各位分布进行分析，选出分布均匀的任意几位作为散列地址</p>
                       <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
                       <p style="font-size: 12px; text-align: center;">
                         H(key) = key %
