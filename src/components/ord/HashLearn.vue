@@ -317,17 +317,10 @@
                   <div class="func_content_con">
                     <div class="hash_func_desc">
                       <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当关键字的位数大于地址的位数，对关键字的各位分布进行分析，选出分布均匀的任意几位作为散列地址</p>
-                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;即<span style='color: #f56c6c; font-weight: 800'>H(key) = key MOD p</span>，其中<span style='color: #f56c6c; font-weight: 800'>p<=m</span></p>
+                      <p><img src="../../assets/images/anly.png" class="anly_pic" /></p>
                       <p style="font-size: 12px; text-align: center;">
-                        H(key) = key %
-                        <el-popover placement="top" width="200" v-model="hash_two_p_inp">
-                          <el-input size="small" class="mini_input" v-model="hash_two_p" placeholder="请输入p的取值"></el-input>
-                          <div style="text-align: right; margin: 0">
-                            <el-button type="text" size="mini" @click="hash_two_p_inp = false">设置完毕</el-button>
-                          </div>
-                          <el-button slot="reference" size="mini" class="mini_btn">p</el-button>
-                        </el-popover>
-                      </p><br>
+                        <el-input class="hash_wei" v-model="hash_wei" placeholder="以逗号隔开关键字位数"></el-input>
+                      </p>
                       <p><el-button class="hashcalc_start" type="primary" size="mini" @click="start_hash">开始哈希运算</el-button></p>
                     </div>
                     <el-table
@@ -491,7 +484,7 @@
           for (let j = 1; j <= 8; j++) {
             data.push({
               key: hash_methods[i] + j,
-              label: `012160349011${ i * 8 + j }`,
+              label: `60349011${ i * 8 + j }`,
               disabled: false
             });
           }
@@ -546,10 +539,13 @@
         cur_table_row: 0,
         // 参数
         hash_one_a: '1',
-        hash_one_b: '-121603490110',
+        hash_one_b: '-603490110',
 
         // hash函数方法——除留取余法
-        hash_two_p: '5'
+        hash_two_p: '5',
+
+        // hash函数方法——数字分析法
+        hash_wei: ''
       }
     },
     mounted() {
@@ -634,10 +630,19 @@
         return 'color: #f56c6c; font-weight: 800'
       },
 
+      notice_msg:function() {
+        let _this = this
+        _this.$notify({
+          title: '完成一项计算',
+          message: '第' + (_this.cur_table_row + 1) + '项数据计算完毕！',
+          type: 'success'
+        });
+        _this.cur_table_row += 1
+      },
+
       // 哈希运算主函数
       start_hash:function () {
         let _this = this
-        console.log(_this.index);
         if (_this.cur_table_row >= _this.hash_data_use.length) {
           _this.$notify({
             title: '操作警告',
@@ -648,27 +653,26 @@
           switch (_this.index) {
             case '0':
               _this.hash_one_main()
+              _this.notice_msg()
               break;
             case '1':
               _this.hash_two_main()
+              _this.notice_msg()
               break;
             case '2':
-              _this.hash_three_main()
+              if (_this.hash_three_main()) {
+                _this.notice_msg()
+              }
               break;
             case '3':
               _this.hash_four_main()
+              _this.notice_msg()
               break;
             case '4':
               _this.hash_five_main()
+              _this.notice_msg()
               break;
           }
-
-          _this.$notify({
-            title: '完成一项计算',
-            message: '第' + (_this.cur_table_row + 1) + '项数据计算完毕！',
-            type: 'success'
-          });
-          _this.cur_table_row += 1
         }
       },
 
@@ -697,8 +701,8 @@
         // })
 
         // 方案2 精简版本
-        let hash_calc_fn = _this.hash_one_a + '*' +_this.data[count].label + '+' + '(' + _this.hash_one_b +')'
-        let hash_val_fn = parseInt(_this.hash_one_a) * parseInt(_this.data[count].label) +  parseInt(_this.hash_one_b)
+        let hash_calc_fn = _this.hash_one_a + '*' + row.no_num + '+' + '(' + _this.hash_one_b +')'
+        let hash_val_fn = parseInt(_this.hash_one_a) * parseInt(row.no_num) +  parseInt(_this.hash_one_b)
         row.hash_calc = hash_calc_fn
         row.hash_val = hash_val_fn
         _this.$set(_this.tableData, count, row)
@@ -711,8 +715,8 @@
         let tableData_temp = []
         let row = _this.tableData[count]
 
-        let hash_calc_fn = _this.data[count].label + ' % ' + _this.hash_two_p
-        let hash_val_fn =  parseInt(_this.data[count].label) %  parseInt(_this.hash_two_p)
+        let hash_calc_fn = row.no_num + ' % ' + _this.hash_two_p
+        let hash_val_fn =  parseInt(row.no_num) %  parseInt(_this.hash_two_p)
         row.hash_calc = hash_calc_fn
         row.hash_val = hash_val_fn
         _this.$set(_this.tableData, count, row)
@@ -720,9 +724,67 @@
 
       // 哈希运算——数字分析法
       hash_three_main:function() {
-        return
-      },
+        let _this = this
+        let count = _this.cur_table_row
+        let tableData_temp = []
+        let row = _this.tableData[count]
+        let hash_calc_wei = _this.get_anly_result()
+        let hash_calc_fn = ''
+        let hash_val_fn = ''
 
+        if (hash_calc_wei) {
+          for(let i = 0; i < hash_calc_wei.length; i++) {
+            hash_calc_fn = hash_calc_fn + row.no_num + '%' + Math.pow(10, hash_calc_wei[i]) + '÷' + Math.pow(10, hash_calc_wei[i] - 1) + ';'
+            hash_val_fn = hash_val_fn + parseInt((parseInt(row.no_num) % Math.pow(10, hash_calc_wei[i])) / Math.pow(10, hash_calc_wei[i] - 1))
+          }
+          row.hash_calc = hash_calc_fn
+          row.hash_val = hash_val_fn
+          _this.$set(_this.tableData, count, row)
+          return true
+        }else {
+          _this.$notify({
+            title: '操作错误',
+            message: '您输入的数据格式有误',
+            type: 'error'
+          });
+          return false
+        }
+      },
+      // 数字分析法——输入验证
+      get_anly_result:function() {
+        let _this = this
+        let anly_inp = _this.hash_wei
+        let anly_wei = anly_inp.split(',')
+        if (_this.justify_num(anly_wei)) {
+          let anly_temp = []
+          for (let i = 0; i < anly_wei.length; i++) {
+            if (anly_temp.indexOf(parseInt(anly_wei[i])) === -1){
+              anly_temp.push(parseInt(anly_wei[i]))
+            }
+          }
+          anly_wei = anly_temp
+          let desc = function(a,b){
+            return b-a
+          }
+          anly_wei.sort(desc)
+          return anly_wei
+        } else {
+          return ''
+        }
+      },
+      // 检查数据格式
+      justify_num:function(arr) {
+        let _this = this
+        let reg = /^[0-9]+\.?[0-9]*$/
+        for(let i = 0; i < arr.length; i++) {
+          if (reg.test(arr[i]) && arr[i] <= _this.tableData[_this.cur_table_row].no_num.length){
+
+          } else {
+            return false
+          }
+        }
+        return true
+      },
       // 哈希运算——平方取中法
       hash_four_main:function() {
         return
@@ -748,6 +810,7 @@
         _this.index = tab.index
         _this.tableData = []
         _this.cur_table_row = 0
+        _this.hash_wei = ''
         _this.hash_data_use = _this.hash_data_all[tab.index]
         _this.init_hash_table()
       },
@@ -756,6 +819,7 @@
       hash_clear:function () {
         this.tableData = []
         this.cur_table_row = 0
+        this.hash_wei = ''
         this.init_hash_table()
         this.$notify({
           title: '操作提醒',
