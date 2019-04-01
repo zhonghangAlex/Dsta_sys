@@ -21,3 +21,13 @@ export const FindPassword = params => {
 export const Logout = params => {
   return axios.get(`${base}logout`, {params : params})
 }
+
+//获取学习时间接口(get)
+export const StudyTimeGet = params => {
+  return axios.get(`${base}studytimeget`, {params : params})
+}
+
+//发送学习时间接口(get)
+export const StudyTimeSend = params => {
+  return axios.get(`${base}studytimesend`, {params : params})
+}

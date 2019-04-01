@@ -51,6 +51,54 @@
   margin-top: 11px;
 }
 
+/*进度条样式*/
+.stu_progress{
+  width: 30%;
+  position: absolute;
+  right: 420px;
+  top: 15px;
+}
+
+/*计时器样式*/
+.time_container {
+  width: 250px;
+  position: absolute;
+  right: calc(470px + 30%);
+  top: 7px;
+  color: #444;
+  font-weight: 600;
+}
+
+.time_container .time_logo {
+  width: 40px;
+  height: 40px;
+  float: right;
+}
+
+.time_container .time_text {
+  margin-left: 20px;
+  display: block;
+  float: right;
+  height: 40px;
+  line-height: 40px;
+}
+
+.time_container .time_text .time_text_d {
+  display: inline-block;
+  margin:0 2px;
+  padding: 0px 5px;
+  height: 30px;
+  line-height: 30px;
+  width: 20px;
+  text-align: center;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-color: #FBC638;
+  color: #fff !important;
+  /*box-shadow: 0 2px 0 2px #444;*/
+}
+
 /*用户相关内容*/
 .userop_container{
   position: absolute;
@@ -127,16 +175,19 @@
 }
 
 /*响应式相关*/
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1350px) {
   .userop_container{
     display: none;
   }
   .stu_progress{
     display: none;
   }
+  .time_container {
+    display: none;
+  }
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1300px) {
   .userop_container_small{
     display: none;
   }

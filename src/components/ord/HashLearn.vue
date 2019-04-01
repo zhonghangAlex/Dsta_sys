@@ -456,7 +456,6 @@
       </el-row>
 
     </div>
-
     <el-dialog
       title="新增自定义数据"
       :visible.sync="add_data_vis"
@@ -465,7 +464,6 @@
       <el-form :model="add_data" ref="add_data" label-width="100px" class="demo-ruleForm">
         <el-form-item
           label="新增关键字"
-          prop="key"
           :rules="[
             { required: true, message: '关键字不能为空'}
           ]"
@@ -474,17 +472,14 @@
         </el-form-item>
         <el-form-item
           label="新增数值"
-          prop="label"
           :rules="[
-            { required: true, message: '数值不能为空'},
-            { type: 'number', message: '必须为数值类型'}
+            { required: true, message: '数值不能为空'}
           ]"
         >
           <el-input v-model="add_data.label" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item
-          label="是否可用"
-          prop="disabled"
+          label="是否禁用"
         >
           <el-switch
             v-model="add_data.disabled" autocomplete="off"
@@ -494,7 +489,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="resetForm('add_data_sub')">重置</el-button>
+          <el-button @click="resetForm('add_data')">重置</el-button>
           <el-button type="primary" @click="add_data_sub('add_data')">提交</el-button>
         </span>
     </el-dialog>
@@ -504,21 +499,6 @@
 <script>
   export default {
     data() {
-      // 数据源
-      const generateData = _ => {
-        const data = []
-        const hash_methods = ["直接定址法", "除留取余法", "数字分析法", "平方取中法", "位移叠加法"]
-        for (let i = 0; i < 5; i++) {
-          for (let j = 1; j <= 8; j++) {
-            data.push({
-              key: hash_methods[i] + j,
-              label: `60349011${ i * 8 + j }`,
-              disabled: false
-            });
-          }
-        }
-        return data;
-      };
       return {
         // 左边line型文本内容
         line_text: [
@@ -551,7 +531,7 @@
         hash_api:'',
         // hash函数方法相关
         // hash函数方法——数据源设置
-        data: generateData(),
+        data: [],
         add_data:{
           key: '',
           label: '',
@@ -588,9 +568,12 @@
         hash_coll: ''
       }
     },
+
     mounted() {
+      this.init_source_data()
       this.init_hash_table()
     },
+
     methods: {
       // 写死的知识卡片函数 2-1
       get_hashhalf_result: function () {
@@ -648,6 +631,23 @@
         }
       },
 
+      // 初始化原始数据
+      init_source_data:function() {
+        let _this = this
+        const data_temp = []
+        const hash_methods = ["直接定址法", "除留取余法", "数字分析法", "平方取中法", "位移叠加法"]
+        for (let i = 0; i < 5; i++) {
+          for (let j = 1; j <= 8; j++) {
+            data_temp.push({
+              key: hash_methods[i] + j,
+              label: `60349011${ i * 8 + j }`,
+              disabled: false
+            });
+          }
+        }
+        _this.data = data_temp
+      },
+
       // 初始化运算表格
       init_hash_table:function () {
         let _this = this
@@ -669,8 +669,42 @@
       add_data_sub(formName) {
         let _this = this
         this.$refs[formName].validate((valid) => {
+          if (isNaN(_this.add_data.label) === true) {
+            _this.$notify({
+              title: '数据格式错误',
+              message: '请输入数值型数据',
+              type: 'error'
+            });
+            return false
+          }
+          if (_this.check_key() === 1) {
+            _this.$notify({
+              title: '关键字错误',
+              message: '已经存在该关键字，请更换另一个关键字',
+              type: 'error'
+            });
+            return false
+          } else if (_this.check_key() === 2) {
+            _this.$notify({
+              title: '数值错误',
+              message: '已经存在该数值，请更换另一个数值',
+              type: 'error'
+            });
+            return false
+          }
           if (valid) {
-            _this.data.push(_this.add_data)
+            _this.data.unshift({
+              key: _this.add_data.key,
+              label: _this.add_data.label,
+              disabled: _this.add_data.disabled
+            });
+            _this.$notify({
+              title: '操作成功',
+              message: '数据添加成功',
+              type: 'success'
+            });
+
+            _this.add_data_vis = false
           } else {
             return false;
           }
@@ -679,6 +713,24 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
+
+      // 检查关键字是否重复
+      check_key:function() {
+        let _this = this
+        let check_status = 0
+        for (let i = 0; i < _this.data.length; i++) {
+          if (_this.add_data.key === _this.data[i].key) {
+            check_status = 1
+            return check_status
+          }
+          if (_this.add_data.label === _this.data[i].label) {
+            check_status = 2
+            return check_status
+          }
+        }
+        return check_status
+      },
+
       // 表格样式
       ele_table_style:function ({row, column, rowIndex, columnIndex}) {
         if (columnIndex === 1 || columnIndex === 3)

@@ -9,6 +9,11 @@
       <img src="../../assets/images/collage.svg" class="collapse" alt="collapse" ref="collapse" />
     </div>
 
+    <div class="time_container">
+      <span class="time_text"><span class="time_text_d">{{time_hours}}</span>时<span class="time_text_d">{{time_minutes}}</span>分<span class="time_text_d">{{time_seconds}}</span>秒</span>
+      <img src="../../assets/images/time_total_l.svg" class="time_logo" />
+    </div>
+
     <el-progress v-if="get_progress()" :text-inside="true" :stroke-width="18" :percentage="learn_per" status="success" color="#FBC638" class="stu_progress"></el-progress>
     <!--rgba(142, 113, 199, 0.7)-->
     <div class="userop_container">
@@ -66,7 +71,7 @@
 </template>
 
 <script>
-  import { Logout } from "../../api/api";
+  import { Logout, StudyTimeGet, StudyTimeSend } from "../../api/api";
 
   export default {
     data(){
@@ -77,15 +82,23 @@
         page_status: '',
         //系统消息条数
         msg_count: "12",
+        // 学习时间相关
+        timer: null,
+        time_hours: 14,
+        time_minutes: 59,
+        time_seconds: 44,
         //学习进度相关
         learn_per: 0
       }
     },
     created(){
       this.get_progress()
+      this.count_time()
     },
     mounted(){
-
+      clearInterval(this.timer)
+      this.StudyTimeGet_fn()
+      this.count_time()
     },
     watch:{
       $route: {
@@ -101,6 +114,20 @@
       }
     },
     methods:{
+      count_time:function() {
+        let _this = this
+        _this.timer = setInterval(() =>{
+          _this.time_seconds += 1
+          if (_this.time_seconds >= 60) {
+            _this.time_minutes += 1
+            _this.time_seconds = _this.time_seconds % 60
+          }
+          if (_this.time_minutes >= 60) {
+            _this.time_hours += 1
+            _this.time_minutes = _this.time_minutes % 60
+          }
+        }, 1000)
+      },
       get_progress:function () {
         let _this = this
         if(this.$route.path == '/introduce'){
@@ -122,6 +149,18 @@
           return false
         }
       },
+      StudyTimeGet_fn:function () {
+        let params = {}
+        StudyTimeGet(params).then(()=>{
+
+        })
+      },
+      StudyTimeSend_fn:function () {
+        let params = {}
+        StudyTimeSend(params).then(()=>{
+
+        })
+      },
       logOut:function () {
         this.$confirm('确定退出登录？').then(()=>{
           let params = {}
@@ -130,18 +169,16 @@
           })
           this.$router.push("/welcome")
         })
+      },
 
-      }
+    },
+    destroyed:function () {
+      clearInterval(this.timer)
+      this.StudyTimeSend_fn()
     }
   }
 </script>
 
 <style scoped>
   @import "../../assets/css/header.css";
-  .stu_progress{
-    width: 30%;
-    position: absolute;
-    right: 420px;
-    top: 15px;
-  }
 </style>
