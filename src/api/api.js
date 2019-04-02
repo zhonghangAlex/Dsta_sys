@@ -24,10 +24,10 @@ export const Logout = params => {
 
 //获取学习时间接口(get)
 export const StudyTimeGet = params => {
-  return axios.get(`${base}studytimeget`, {params : params})
+  return axios.post(`${base}studytimeget`, params)
 }
 
 //发送学习时间接口(get)
 export const StudyTimeSend = params => {
-  return axios.get(`${base}studytimesend`, {params : params})
+  return axios.post(`${base}studytimesend`, params)
 }

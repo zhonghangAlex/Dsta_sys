@@ -21,7 +21,7 @@
         <img src="../../assets/images/girl_logo.svg" class="user_logo"/>
       </i>
       <span class="username">
-        {{ getUserName }}
+        {{ cookieUserName }}
       </span>
       <ul class="icon_container">
         <li>
@@ -51,7 +51,7 @@
           <el-dropdown>
             <img class="el-dropdown-link" src="../../assets/images/setting.svg"/>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>{{ getUserName }}</el-dropdown-item>
+              <el-dropdown-item>{{ cookieUserName }}</el-dropdown-item>
               <el-dropdown-item>题库下载</el-dropdown-item>
               <el-dropdown-item>
                 <el-badge :value="msg_count" class="item">
@@ -84,36 +84,57 @@
         msg_count: "12",
         // 学习时间相关
         timer: null,
-        time_hours: 14,
-        time_minutes: 59,
-        time_seconds: 44,
+        time_hours: 0,
+        time_minutes: 0,
+        time_seconds: 0,
         //学习进度相关
-        learn_per: 0
+        learn_per: 0,
+        //cookie
+        cookieUserName:''
       }
     },
     created(){
       this.get_progress()
       this.count_time()
     },
+    updated(){
+
+    },
     mounted(){
+      let _this = this
       clearInterval(this.timer)
       this.StudyTimeGet_fn()
       this.count_time()
+      this.getUserName()
+      window.onbeforeunload= function(event) {
+        clearInterval(_this.timer)
+        _this.StudyTimeSend_fn()
+      }
     },
     watch:{
       $route: {
         handler: function (newpath, oldpath) {
+          console.log(newpath);
           this.get_progress()
+          this.getUserName()
+          if (newpath.path === '/welcome') {
+            this.StudyTimeSend_fn()
+            clearInterval(this.timer)
+          } else {
+            clearInterval(this.timer)
+            this.count_time()
+          }
         },
         deep: true
       }
     },
     computed:{
-      getUserName: function () {
-        return this.$store.getters.getUserNameFn
-      }
+
     },
     methods:{
+      getUserName: function () {
+        this.cookieUserName = this.$cookies.get('username')
+      },
       count_time:function() {
         let _this = this
         _this.timer = setInterval(() =>{
@@ -150,13 +171,30 @@
         }
       },
       StudyTimeGet_fn:function () {
-        let params = {}
-        StudyTimeGet(params).then(()=>{
-
+        let _this = this
+        let userid = _this.$cookies.get('userid')
+        let params = {
+          userid: userid
+        }
+        StudyTimeGet(params).then((response)=>{
+          let res = response.data
+          let seconds_total = res.result.studytime
+          let hours_temp = parseInt(seconds_total / 3600)
+          let minutes_temp = parseInt((seconds_total - hours_temp * 3600) / 60)
+          let seconds_temp = seconds_total - hours_temp * 3600 - minutes_temp * 60
+          _this.time_hours = hours_temp
+          _this.time_minutes = minutes_temp
+          _this.time_seconds = seconds_temp
         })
       },
       StudyTimeSend_fn:function () {
-        let params = {}
+        let _this = this
+        let userid = _this.$cookies.get('userid')
+        let studytime = _this.time_hours * 3600 + _this.time_minutes * 60 + _this.time_seconds
+        let params = {
+          userid: userid,
+          studytime: studytime
+        }
         StudyTimeSend(params).then(()=>{
 
         })
@@ -165,16 +203,12 @@
         this.$confirm('确定退出登录？').then(()=>{
           let params = {}
           Logout(params).then(()=>{
-
           })
+          this.$cookies.remove('username')
+          this.$cookies.remove('userid')
           this.$router.push("/welcome")
         })
-      },
-
-    },
-    destroyed:function () {
-      clearInterval(this.timer)
-      this.StudyTimeSend_fn()
+      }
     }
   }
 </script>

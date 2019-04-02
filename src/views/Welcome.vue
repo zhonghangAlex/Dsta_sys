@@ -270,9 +270,10 @@
               duration:2000,
               showClose:true
             });
-            _this.userName = res.result.name
+            _this.userName = res.result.username
             _this.$cookies.set("username", _this.userName)
-            _this.$store.dispatch("setUserName", res.result.name)
+            _this.$cookies.set("userid", _this.userID)
+            // _this.$store.dispatch("setUserName", _this.userName)
             _this.$router.push("/ordindex")
           }else if(res.status == '0' && res.result.power == '1') {
             _this.$message({
@@ -319,7 +320,7 @@
               duration:2000,
               showClose:true
             });
-            _this.$router.push("/ordindex")
+            // _this.$router.push("/ordindex")
           }else {
             _this.$message({
               message: res.message,
