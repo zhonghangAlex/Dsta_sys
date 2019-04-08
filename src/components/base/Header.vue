@@ -120,8 +120,11 @@
           if (newpath.path === '/welcome') {
             this.StudyTimeSend_fn()
             clearInterval(this.timer)
+            this.$cookies.remove('username')
+            this.$cookies.remove('userid')
           } else {
             clearInterval(this.timer)
+            this.StudyTimeGet_fn()
             this.count_time()
           }
         },
@@ -204,8 +207,8 @@
           let params = {}
           Logout(params).then(()=>{
           })
-          this.$cookies.remove('username')
-          this.$cookies.remove('userid')
+          // this.$cookies.remove('username')
+          // this.$cookies.remove('userid')
           this.$router.push("/welcome")
         })
       }

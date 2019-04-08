@@ -177,7 +177,7 @@
 }
 
 .lr_con {
-  height: 100%;
+  min-height: 100%;
 }
 
 .l_con {
@@ -280,4 +280,66 @@
   margin: 0 auto;
 }
 
+/*学生用户-非对称加密算法界面*/
+/*RSA加密解密演示相关样式*/
+/*信息录入*/
+.rsa_info_con {
+
+}
+
+.rsa_info {
+  height: 285px;
+  width: 95%;
+}
+
+/*信息初步处理*/
+.rsa_result_con{
+  padding: 0 10px;
+}
+
+.rsa_result {
+  height: 285px;
+}
+
+.result_text {
+  padding: 7px 10px;
+}
+
+/*RSA演示线*/
+.rsa_line_con {}
+
+.rsa_line {
+  width: 100%;
+  height: 290px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.rsa_line li {
+  /*height: 290px;*/
+  /*background: red;*/
+}
+
+.user_div {
+  /*position: relative;*/
+  /*top: 50%;*/
+  /*margin-top: -35px;*/
+  margin: 0 auto;
+  display: block;
+  width: 70px;
+  height: 70px;
+  line-height: 70px;
+  text-align: center;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-color: #FBC638;
+  color: #fff;
+}
+
+.rsa_gong_con {
+  height: 285px;
+  width: 170px;
+}
 

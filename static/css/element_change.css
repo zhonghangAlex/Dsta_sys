@@ -21,4 +21,31 @@
   width: 290px !important;
 }
 
+/*单选样式修改*/
+.el-radio-button__orig-radio:checked+.el-radio-button__inner{
+  background-color: rgb(105, 179, 194) !important;
+  border-color: rgb(105, 179, 194) !important;
+  box-shadow: -1px 0 0 0 rgb(105, 179, 194) !important;
+  color:white !important;
+}
+.el-radio-button__inner:hover{
+  color:#44a0b3 !important;
+}
+
+/*按钮样式*/
+.el-button--warning {
+  color: #FFF !important;
+  background-color: #FBC638 !important;
+  border-color: #FBC638 !important;
+}
+.start_run_ord {
+  color: #fff !important;
+  background-color: rgb(105, 179, 194) !important;
+  border-color: rgb(105, 179, 194) !important;
+}
+
+/*RSA质数范围单选*/
+/*.range_radio .el-radio-button__inner{*/
+  /*padding: 6px 6px !important;*/
+/*}*/
 
