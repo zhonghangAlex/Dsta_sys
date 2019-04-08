@@ -19,6 +19,9 @@ require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
 Vue.use(VueCookies)
 
+let bigInt = require("big-integer")
+Vue.use(bigInt)
+
 
 /* eslint-disable no-new */
 new Vue({

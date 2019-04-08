@@ -137,8 +137,8 @@
                       <p><el-tag style="width: 100%;text-align: center;margin-top: 10px;">明文M = <span
                         style='color: #f56c6c; font-weight: 800'>{{ ming_info }}</span></el-tag></p>
                     </li>
-                    <li>
-                      <el-card class="rsa_gong_con" style="display: flex; flex-direction: column; justify-content: center;">
+                    <li class="rsa_gong_con" ref="slow_show_li1">
+                      <el-card  class="rsa_gong" style="display: flex; flex-direction: column; justify-content: center;">
                         <p><span style="display:flex;justify-content: center;">公钥E的计算</span></p>
                         <p><el-tag style="width: 100%;text-align: center;">1 < E < φ(N)</el-tag></p>
                         <p><el-tag style="width: 100%;text-align: center;">E 和 φ(N) 互质</el-tag></p>
@@ -148,8 +148,8 @@
                           style='color: #f56c6c; font-weight: 800'>{{ public_key }}</span></el-tag></p>
                       </el-card>
                     </li>
-                    <li>
-                      <el-card class="rsa_gong_con" style="display: flex; flex-direction: column; justify-content: center;">
+                    <li class="rsa_gong_con" ref="slow_show_li2">
+                      <el-card  class="rsa_gong" style="display: flex; flex-direction: column; justify-content: center;">
                         <p><span style="display:flex;justify-content: center;">公钥加密公式</span></p>
                         <p><el-tag style="width: 100%;text-align: center;">C ＝ S mod N</el-tag></p>
                         <p><el-tag style="width: 100%;text-align: center;">S等于M的E次方</el-tag></p>
@@ -165,8 +165,8 @@
                       <p><el-tag style="width: 100%;text-align: center;margin-top: 10px;">密文C = <span
                         style='color: #f56c6c; font-weight: 800'>{{ mi_info }}</span></el-tag></p>
                     </li>
-                    <li>
-                      <el-card class="rsa_gong_con" style="display: flex; flex-direction: column; justify-content: center;">
+                    <li class="rsa_gong_con" ref="slow_show_li3">
+                      <el-card  class="rsa_gong" style="display: flex; flex-direction: column; justify-content: center;">
                         <p><span style="display:flex;justify-content: center;">私钥D的计算</span></p>
                         <p><el-tag style="width: 100%;text-align: center;">E * D % φ(N) = 1</el-tag></p>
                         <p><el-tag style="width: 100%;text-align: center;">满足公式倒推</el-tag></p>
@@ -175,8 +175,8 @@
                           style='color: #f56c6c; font-weight: 800'>{{ private_key }}</span></el-tag></p>
                       </el-card>
                     </li>
-                    <li>
-                      <el-card class="rsa_gong_con" style="display: flex; flex-direction: column; justify-content: center;">
+                    <li class="rsa_gong_con" ref="slow_show_li4">
+                      <el-card  class="rsa_gong" style="display: flex; flex-direction: column; justify-content: center;">
                         <p><span style="display:flex;justify-content: center;">私钥解密公式</span></p>
                         <p><el-tag style="width: 100%;text-align: center;">M ＝ T mod N</el-tag></p>
                         <p><el-tag style="width: 100%;text-align: center;">T等于C的D次方</el-tag></p>
@@ -244,18 +244,19 @@
                       <p>
                         <span>RSA质因子：</span>
                         <el-radio-group class="range_radio" @change="range_change" size="small" v-model="rsa_zhi_range">
-                          <el-radio-button label="25">≤25</el-radio-button>
+                          <el-radio-button label="20">≤20</el-radio-button>
                           <el-radio-button label="50">≤50</el-radio-button>
-                          <el-radio-button label="75">≤75</el-radio-button>
                           <el-radio-button label="100">≤100</el-radio-button>
+                          <el-radio-button label="500">≤500</el-radio-button>
                         </el-radio-group>
                       </p>
                       <p>
                         <el-input style="width: 48%" disabled  v-model="rsa_zhi1" clearable></el-input>
                         <el-input style="width: 48%" disabled  v-model="rsa_zhi2" clearable></el-input>
                       </p>
-                      <p>
-                        <el-button type="primary" size="small" @click.native="rsa_main_start" style="width: 50%; display:block; margin: 0 auto;">点击开始运算演示</el-button>
+                      <p style="display: flex; flex-direction: row; justify-content: space-around;">
+                        <el-button type="primary" size="small" @click.native="rsa_main_start" style="width: 40%; ">点击开始运算演示</el-button>
+                        <el-button type="primary" size="small" @click.native="random_reset" style="width: 40%;">随机重置</el-button>
                       </p>
                     </el-tab-pane>
                   </el-tabs>
@@ -272,6 +273,7 @@
 
 <script>
   import SaDiyDialog from '@/components/base/Sa_DIY_Dialog'
+  let bigInt = require("big-integer")
   export default {
     data() {
       return {
@@ -326,13 +328,15 @@
         // 明文信息
         ming_info: '',
         ming_info_jie:'',
+        // 明文最大取值
+        ming_max: 500,
 
         // 自定义RSA情况下，质数因子的输入
         rsa_zhi1: '',
         rsa_zhi2: '',
 
         // 随机生成RSA情况下 质数因子的取值范围
-        rsa_zhi_range: '25',
+        rsa_zhi_range: '20',
 
         // 公钥计算后
         public_key: '',
@@ -369,10 +373,18 @@
       // 切换数据生成方式的时候时间处理
       change_rsa_method: function (tab, event) {
         let _this = this
-        _this.rsa_info = tab.index
+        if (tab) {
+          _this.rsa_info = tab.index
+        }
         _this.ming_info = ''
+        _this.mi_info = ''
         _this.rsa_zhi1 = ''
         _this.rsa_zhi2 = ''
+        _this.rsa_ola = ''
+        _this.rsa_mode = ''
+        _this.public_key = ''
+        _this.private_key = ''
+        _this.ming_info_jie = ''
         if (_this.rsa_info === '1') {
           // 随机生成明文方法
           _this.pro_ming()
@@ -382,9 +394,14 @@
 
       },
 
+      // 随机重置
+      random_reset:function() {
+        this.change_rsa_method()
+      },
+
       // 随机生成明文方法
       pro_ming:function () {
-        let ming_temp = Math.floor(Math.random() * 50)
+        let ming_temp = Math.floor(Math.random() * this.ming_max)
         this.ming_info = ming_temp
       },
 
@@ -414,7 +431,7 @@
       if_zhi:function (jus_num) {
         jus_num = parseInt(jus_num)
         if (jus_num === 2){
-          return true
+          return false
         }else if(jus_num % 2 === 0 || jus_num === 1){
           return false
         }
@@ -429,7 +446,14 @@
 
       // 切换质数取值范围
       range_change: function () {
-        this.pro_zhi()
+        let _this = this
+        _this.mi_info = ''
+        _this.rsa_ola = ''
+        _this.rsa_mode = ''
+        _this.public_key = ''
+        _this.private_key = ''
+        _this.ming_info_jie = ''
+        _this.pro_zhi()
       },
 
       // 自定义质数的检测
@@ -465,7 +489,7 @@
         } else {
           this.$notify({
             title: '操作失败',
-            message: '您所填的不是质数，请输入正确的质数',
+            message: '请填入非2的质数',
             type: 'error'
           });
           if (zhi_index === 1){
@@ -483,6 +507,33 @@
           // 初始化数据
           _this.rsa_mode = _this.rsa_zhi1 * _this.rsa_zhi2
           _this.rsa_ola = (_this.rsa_zhi1 - 1) * (_this.rsa_zhi2 - 1)
+
+          // 动画效果
+          _this.$refs.slow_show_li1.style.display = 'block'
+          _this.$refs.slow_show_li2.style.display = 'block'
+          _this.$refs.slow_show_li3.style.display = 'block'
+          _this.$refs.slow_show_li4.style.display = 'block'
+
+          let interval1 = setInterval(()=>{
+            _this.$refs.slow_show_li1.style.opacity = 1
+            _this.$refs.slow_show_li1.style.width = 170 + 'px'
+            clearInterval(interval1);
+          }, 100)
+          let interval2 = setInterval(()=>{
+            _this.$refs.slow_show_li2.style.opacity = 1
+            _this.$refs.slow_show_li2.style.width = 170 + 'px'
+            clearInterval(interval2);
+          }, 1100)
+          let interval3 = setInterval(()=>{
+            _this.$refs.slow_show_li3.style.opacity = 1
+            _this.$refs.slow_show_li3.style.width = 170 + 'px'
+            clearInterval(interval3);
+          }, 2100)
+          let interval4 = setInterval(()=>{
+            _this.$refs.slow_show_li4.style.opacity = 1
+            _this.$refs.slow_show_li4.style.width = 170 + 'px'
+            clearInterval(interval4);
+          }, 3100)
 
           // 计算出公钥
           _this.calc_public_key()
@@ -502,7 +553,7 @@
           } else {
             _this.$notify({
               title: '计算完成',
-              message: '系统已经完成了计算，但是前后明文并不相同，这是由于计算过程中出现了特别庞大的数据，导致数据溢出，请重新运行或者选取较小的数值',
+              message: '系统已经完成了计算，但是前后明文并不相同，这是由于计算过程中出现了特别庞大的数据，导致数据溢出，请重新选址计算',
               type: 'warning'
             });
           }
@@ -541,16 +592,18 @@
       // 计算出密文
       calc_mi_info:function () {
         let _this = this
-        let S = Math.pow(parseInt(_this.ming_info), parseInt(_this.public_key))
-        _this.mi_info = S % _this.rsa_mode
+        let S = bigInt(parseInt(_this.ming_info)).pow(parseInt(_this.public_key))
+        // let S = Math.pow(parseInt(_this.ming_info), parseInt(_this.public_key))
+        _this.mi_info = bigInt(S).mod(_this.rsa_mode)
+        // _this.mi_info = S % _this.rsa_mode
       },
 
       // 计算出私钥
       calc_private_key:function () {
         let _this = this
         let private_key_temp = ''
-        for (let i = 1; 1; i++){
-          if (_this.public_key * i % _this.rsa_ola === 1) {
+        for (let i = 1; i <= 10000; i++){
+          if (parseInt(_this.public_key) * i % parseInt(_this.rsa_ola) === 1) {
             private_key_temp = i
             break
           }
@@ -561,8 +614,10 @@
       // 有密文计算出明文
       calc_ming_info:function () {
         let _this = this
-        let T = Math.pow(parseInt(_this.mi_info), parseInt(_this.private_key))
-        _this.ming_info_jie = T % _this.rsa_mode
+        let T = bigInt(parseInt(_this.mi_info)).pow(parseInt(_this.private_key))
+        // let T = Math.pow(parseInt(_this.mi_info), parseInt(_this.private_key))
+        _this.ming_info_jie = bigInt(T).mod(_this.rsa_mode)
+        // _this.ming_info_jie = T % _this.rsa_mode
       }
     }
 

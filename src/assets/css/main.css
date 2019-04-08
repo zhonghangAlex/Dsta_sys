@@ -339,7 +339,18 @@
 }
 
 .rsa_gong_con {
+  display: none;
   height: 285px;
-  width: 170px;
+  opacity: 0;
+  width: 0px;
+  transition: all 1s;
 }
+
+.rsa_gong {
+  width: 100%;
+  height: 98%;
+}
+
+
+
 
