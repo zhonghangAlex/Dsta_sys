@@ -351,6 +351,158 @@
   height: 98%;
 }
 
+/*学生用户-数字签名之旅界面*/
+/*学生用户-数字签名之旅界面*/
+.wel_con {
+  width: 550px;
+  height: 400px;
+  top:50%;
+  margin-top: -300px;
+  left: 50%;
+  background-color: #FFFFFF;
+  margin-left: -175px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border:1px solid #FBC638;
+  position: absolute;
+  transition: all 1s;
+}
 
+.wel_con:hover {
+  box-shadow: 3px 10px 15px 0px rgba(0,0,0,0.2);
+  transition: all 0.5s;
+}
+
+.wel_title {
+  width: 100%;
+  height: 100px;
+  background: -webkit-linear-gradient(0deg, #FBC638, #FAA600); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(0deg, #FBC638, #FAA600); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(0deg, #FBC638, #FAA600); /* Firefox 3.6 - 15 */
+  background: linear-gradient(0deg, #FBC638, #FAA600); /* 标准的语法 */
+}
+
+.wel_title_text {
+  color: #FFFFFF;
+  width: 100%;
+  height: 70px;
+  text-align: center;
+  line-height: 70px;
+  font-weight: 800;
+  font-size: 24px;
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+}
+
+.wel_logo_con {
+  width: 80px;
+  height: 80px;
+  background-color: #ffffff;
+  position: absolute;
+  z-index: 100;
+  margin-top: -40px;
+  left: 50%;
+  margin-left: -40px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border:2px solid #F1F1F1;
+  box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.2);
+}
+
+.wel_logo_con img {
+  width: 70%;
+  height: 70%;
+  left: 15%;
+  top: 15%;
+  position: relative;
+}
+
+.wel_op_con {
+  position: relative;
+  height: calc(100% - 120px);
+  padding: 10px 20px;
+}
+
+.send_note {
+  line-height: 20px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+/*欢迎界面和数字签名旅行界面转场效果*/
+.trip_wel-enter-active {
+  transition: all .8s
+}
+.trip_wel-enter, .trip_wel-leave-active {
+  opacity: 0;
+  transform:  translateY( -200px );
+  /*transform: rotate(-15deg);*/
+}
+
+.trip_detail-enter-active {
+  transition: all .5s
+}
+.trip_detail-enter, .trip_detail-leave-active {
+  opacity: 0;
+  transform:  translateY( -200px );
+  /*transform: rotate(-15deg);*/
+}
+
+/*返回重新填写钥匙*/
+.trip_back {
+  display: block;
+  width: 150px;
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+  right: 0;
+  top: 100px;
+  background-color: #FAA600;
+  color: #FFFFFF;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.5s;
+  z-index: 100;
+}
+
+.font_change {
+  font-family: "宋体" !important;
+}
+
+.trip_back:hover {
+  top: 97px;
+  width: 160px;
+  height: 46px;
+  line-height: 46px;
+  transition: all 0.5s;
+}
+
+/*数字签名业务工作流*/
+/*通用样式*/
+.col_con_long {
+  height: 100%;
+}
+
+.trip_con {
+  /* width: calc(100% - 290px); */
+  width: calc(100%);
+  height: calc(100% - 20px);
+  padding-bottom: 20px;
+  position: relative;
+  float: left;
+}
+
+/*小航的加密打包传送模块*/
+
+/*小昂的解密接收模块*/
+
+/*信件传输匹配样式*/
+
+/*黑客拦截模块样式*/
 
 
