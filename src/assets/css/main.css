@@ -451,6 +451,17 @@
   /*transform: rotate(-15deg);*/
 }
 
+.trip_hack-enter-active {
+  transition: all .5s
+}
+.trip_hack-enter, .trip_hack-leave-active {
+  opacity: 0;
+  transform:  translateY( -200px );
+  transition: all .5s
+  /*transform: rotate(-15deg);*/
+}
+
+
 /*返回重新填写钥匙*/
 .trip_back {
   display: block;
@@ -497,12 +508,191 @@
   float: left;
 }
 
+.trip_text {
+  line-height: 25px;
+  height: calc(100% - 100px);
+  overflow-y: auto;
+  width: calc(100% - 40px);
+  position: absolute;
+}
+
+.trip_text p{
+  /*line-height: 80px;*/
+}
+
+.trip_line {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.trip_line li:nth-child(1) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.trip_line li:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /*background-color: #f56c6c;*/
+}
+
+.trip_line li:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
 /*小航的加密打包传送模块*/
+.trip_hang {
+  width: 550px;
+  height: 550px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 3px solid #44a0b3;
+  overflow: hidden;
+}
+
+.trip_hat {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 550px;
+  height: 110px;
+  background-color: #44a0b3;
+}
+
+.trip_boy_logo {
+  width: 90px;
+  height: 90px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  position: relative;
+}
+
+.boy_text {
+  display: block;
+  width: 50px;
+  height: 110px;
+  text-align: center;
+  line-height: 110px;
+  font-weight: 800;
+  font-size: 35px;
+  color: #44a0b3;
+  background-color: #ffffff;
+}
+
+.trip_main_con {
+  width: 450px;
+  margin: 0 auto;
+  height: 440px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.trip_main_con .el-button{
+  margin-left: 10px;
+}
+
+.hack_main_con .el-button{
+  margin-left: 8px;
+}
 
 /*小昂的解密接收模块*/
-
-/*信件传输匹配样式*/
+.trip_ang {
+  width: 550px;
+  height: 550px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 3px solid #44a0b3;
+  overflow: hidden;
+}
 
 /*黑客拦截模块样式*/
+.trip_hack {
+  width: 350px;
+  height: 350px;
+  margin: 0 auto;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border:3px solid #44a0b3;
+  overflow: hidden;
+}
 
+.hack_hat {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 350px;
+  height: 80px;
+  background-color: #44a0b3;
+}
+
+.hack_text {
+  display: block;
+  width: 30px;
+  height: 80px;
+  text-align: center;
+  line-height: 80px;
+  font-weight: 800;
+  font-size: 25px;
+  color: #44a0b3;
+  background-color: #ffffff;
+}
+
+.trip_hack_logo {
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
+  margin-left: 14px;
+  margin-right: 14px;
+  position: relative;
+}
+
+.hack_main_con {
+  width: 300px;
+  margin: 0 auto;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+/*信件传输匹配样式*/
+.trip_env {
+  width: 450px;
+  height: 250px;
+  /*background-color: #FAA600;*/
+}
+
+.send_env_logo {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  margin: 0 auto;
+}
+
+.send_list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-weight: 800;
+  font-size: 30px;
+}
+
+.send_list li {
+  font-family: "宋体" !important;
+}
+
+.right_point {
+}
 

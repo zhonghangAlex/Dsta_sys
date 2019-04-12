@@ -221,7 +221,7 @@
                         <span>自定义明文信息：</span>
                       </p>
                       <p>
-                        <el-input style="width: 50%" placeholder="请输入数字明文信息" v-model="ming_info" clearable></el-input>
+                        <el-input style="width: 50%" @blur="jus_num(ming_info)" placeholder="请输入数字明文信息" v-model="ming_info" clearable></el-input>
                       </p>
                       <p>
                         <span>RSA质数因子：</span>
@@ -368,6 +368,19 @@
       ele_table_style:function ({row, column, rowIndex, columnIndex}) {
         if (columnIndex === 2 || columnIndex === 3)
           return 'color: #f56c6c; font-weight: 800'
+      },
+
+      // 校验输入是否为数值型
+      jus_num:function (jus_str) {
+        let _this = this
+        if (isNaN(jus_str) || parseInt(jus_str) > 1000) {
+          this.$notify({
+            title: '操作失败',
+            message: '请填入较小数值类型的明文',
+            type: 'error'
+          });
+          _this.ming_info = ''
+        }
       },
 
       // 切换数据生成方式的时候时间处理

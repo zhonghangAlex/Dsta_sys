@@ -9,8 +9,10 @@ import axios from 'axios'
 import VideoPlayer from 'vue-video-player'
 import VueCookies from 'vue-cookies'
 import store from './store/store.js'
+import JsEncrypt from 'jsencrypt'
 
 
+Vue.prototype.$jsEncrypt = JsEncrypt
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 Vue.use(ElementUI)
