@@ -11,7 +11,7 @@ import QuesLearn from '@/components/ord/QuesLearn'
 import QuesMag from '@/components/super/QuesMag'
 import StuLearn from '@/components/super/StuLearn'
 import StuMag from '@/components/super/StuMag'
-
+import Test from '@/components/ord/Test'
 Vue.use(Router)
 
 export default new Router({
@@ -28,6 +28,11 @@ export default new Router({
       path: '/welcome',
       name: 'Welcome',
       component: Welcome
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test
     },
     {
       path: '/ordindex',

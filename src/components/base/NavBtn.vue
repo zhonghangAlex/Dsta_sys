@@ -1,9 +1,9 @@
 <template>
   <aside class="container" ref="nav">
     <div class="bg_container">
-      <ul class="bg_ul">
-        <li class="bg_little" v-for="(item, index) in list_count" :key="index"></li>
-      </ul>
+      <!--<ul class="bg_ul">-->
+        <!--<li class="bg_little" v-for="(item, index) in list_count" :key="index"></li>-->
+      <!--</ul>-->
     </div>
     <router-link class="cta" v-for="item in getNavList()" :to="item[1]" :key="item[0]">
       <span>{{item[0]}}</span>
@@ -28,8 +28,8 @@
           ["数字签名简介", "/introduce"],
           ["哈希算法", "/hashlearn"],
           ["非对称加密算法", "/acalearn"],
-          ["数字签名之旅", "/dstalearn"]
-          // ["我的题库", "/queslearn"]
+          ["数字签名之旅", "/dstalearn"],
+          ["我的题库", "/queslearn"]
         ],
         nav_sup: [
           ["题库管理", "/quesmag"],

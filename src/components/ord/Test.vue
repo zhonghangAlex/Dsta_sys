@@ -1,61 +1,46 @@
 <template>
-  <div class="main_con">
-    <div class="pad_con">
       <div class="index">
         <div class="entrance-bottom">
           <div class="entrance-bottom-frame clearfix">
-            <div :class="{'entrance-bottom-frame-line': true, 'active': timu_id === index}"  v-for="(item, index) in quesdata">
-              <div :class="{'entrance-bottom-frame-beijing': true }"></div>
+            <div class="entrance-bottom-frame-line active" v-for="(item, index) in quesdata">
+              <div class="entrance-bottom-frame-beijing"></div>
               <div class="entrance-bottom-frame-line-id">{{ item.id }}</div>
-              <div class="entrance-bottom-frame-line-title">{{ item.title }}</div>
+              <div class="entrance-bottom-frame-line-title">编译和运行下面代码时显示的结果是（）</div>
               <pre class="pre_message">
                 <code v-html="item.code">
                 </code>
               </pre>
               <div class="entrance-bottom-frame-line-button">
                 <div class="entrance-bottom-frame-line-button-id">A</div>
-                <div class="entrance-bottom-frame-line-button-frame">{{ item.xuanxiang[0] }}</div>
+                <div class="entrance-bottom-frame-line-button-frame">打开当前目录下的文件1.txt，既可以向文件写数据，也可以从文件读数据</div>
               </div>
               <div class="entrance-bottom-frame-line-button">
                 <div class="entrance-bottom-frame-line-button-id">B</div>
-                <div class="entrance-bottom-frame-line-button-frame">{{ item.xuanxiang[1] }}</div>
+                <div class="entrance-bottom-frame-line-button-frame">ClassCastException</div>
               </div>
               <div class="entrance-bottom-frame-line-button">
                 <div class="entrance-bottom-frame-line-button-id">C</div>
-                <div class="entrance-bottom-frame-line-button-frame">{{ item.xuanxiang[2] }}</div>
+                <div class="entrance-bottom-frame-line-button-frame">FileNotFoundException</div>
               </div>
               <div class="entrance-bottom-frame-line-button">
                 <div class="entrance-bottom-frame-line-button-id">D</div>
-                <div class="entrance-bottom-frame-line-button-frame">{{ item.xuanxiang[3] }}</div>
+                <div class="entrance-bottom-frame-line-button-frame">IndexOutOfBoundsException</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
   export default {
     data() {
       return {
-        timu_id: 0,
         quesdata: [
           {
             "id" : "1",
-            "title": "单项选择题",
-            "code": "对于线性表（7,34,55,25,64,46,20,10）进行散列存储时，若使用H（K）= K % 9作为散列函数，则散列地址为1的元素有（）个",
-            "xuanxiang":[
-              "打开当前目录下的文件1.txt，既可以向文件写数据，也可以从文件读数据",
-              "ClassCastException",
-              "FileNotFoundException",
-              "IndexOutOfBoundsException",
-            ]
-          },{
-            "id" : "2",
-            "title": "单项选择题",
-            "code":"public class ThisConstructorCall { "+ "<br>" +
+            "title": "编译和运行下面代码时显示的结果是（）",
+            "code": "public class ThisConstructorCall { "+ "<br>" +
               "&nbsp&nbsp"+"public ThisConstructorCall(String s){"+ "<br>" +
               "&nbsp&nbsp"+"	System.out.println('s = ' + s);  "+ "<br>" +
               "&nbsp&nbsp"+"} "+ "<br>" +
@@ -68,14 +53,14 @@
               "&nbsp&nbsp"+"}"+ "<br>" +
               "}",
             "xuanxiang":[
-              "打开当前目录下的文件2.txt，既可以向文件写数据，也可以从文件读数据",
+              "打开当前目录下的文件1.txt，既可以向文件写数据，也可以从文件读数据",
               "ClassCastException",
               "FileNotFoundException",
               "IndexOutOfBoundsException",
             ]
           },{
-            "id" : "3",
-            "title": "单项选择题",
+            "id" : "2",
+            "title": "编译和运行下面代码时显示的结果是（）",
             "code":"public class ThisConstructorCall { "+ "<br>" +
               "&nbsp&nbsp"+"public ThisConstructorCall(String s){"+ "<br>" +
               "&nbsp&nbsp"+"	System.out.println('s = ' + s);  "+ "<br>" +
@@ -107,13 +92,16 @@
         let active = "active"
         let none = "none"
         _this.addClass(dact, active)
-        for (let i = 0; i < document.querySelectorAll(".entrance-bottom-frame-line-button").length; i++) {
+        let timu_id = 0
+        for (var i = 0; i < document.querySelectorAll(".entrance-bottom-frame-line-button").length; i++) {
           document.querySelectorAll(".entrance-bottom-frame-line-button")[i].onclick = function () {
-            if (_this.timu_id < document.querySelectorAll(".entrance-bottom-frame-line").length - 1) {
+            if (timu_id < document.querySelectorAll(".entrance-bottom-frame-line").length - 1) {
               let frame_left = _this.getStylee(document.querySelector('.entrance-bottom-frame'), 'marginLeft')
               document.querySelector(".entrance-bottom-frame").style.marginLeft = parseInt(frame_left) - 1050 + "px"
-              _this.timu_id++;
-              _this.addClass(document.querySelectorAll(".entrance-bottom-frame-beijing")[_this.timu_id - 1], none)
+              timu_id++;
+              _this.addClass(document.querySelectorAll(".entrance-bottom-frame-line")[timu_id], active)
+              _this.removeClass(document.querySelectorAll(".entrance-bottom-frame-line")[timu_id - 1], active)
+              _this.addClass(document.querySelectorAll(".entrance-bottom-frame-beijing")[timu_id - 1], none)
             } else {
               alert("最后一题啦")
             }

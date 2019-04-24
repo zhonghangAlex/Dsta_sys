@@ -360,12 +360,12 @@
   margin-top: -300px;
   left: 50%;
   background-color: #FFFFFF;
-  margin-left: -175px;
+  margin-left: -275px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   border:1px solid #FBC638;
-  position: absolute;
+  position: relative;
   transition: all 1s;
 }
 
@@ -695,4 +695,159 @@
 
 .right_point {
 }
+
+/*学生用户-题库界面*/
+/*学生用户-题库界面*/
+.index {
+  width: calc(100%);
+  height: 700px;
+  position: relative;
+  top: 50%;
+  margin-top: -380px;
+  float: left;
+}
+.entrance-bottom-frame{
+  transition: all 0.8s;
+  width: 10000%;
+  margin: 0 auto;
+  height:630px;
+  margin-top: 40px;
+  position: absolute;
+  left: 50%;
+  margin-left: -550px;
+}
+.entrance-bottom-frame-beijing{
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left: 0;
+  background: url(../images/yincang.png);
+  background-size:cover;
+}
+.entrance-bottom-frame-line{
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-filter: grayscale(100%);/* CSS3 filter方式，webkit内核方式，firefox外的绝大部分的现代浏览器*/
+  -moz-filter: grayscale(100%);            /* 目前没有实现 */
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);            /* CSS3 filter方式，标准写法*/
+  background-color: #ffffff;
+  transition: all 0.8s;
+  pointer-events: none;
+  cursor: default;
+  margin-top: 35px;
+  box-shadow: 0 0 5px #c5e2ff;
+  width: 1000px;
+  height: 570px;
+  float: left;
+  margin-left:50px;
+  position: relative;
+}
+.entrance-bottom-frame-line-id{
+  font-size: 30px;
+  color: white;
+  text-align:center;
+  line-height: 60px;
+  position: absolute;
+  left: 50%;
+  margin-left: -30px;
+  height: 60px;
+  width: 60px;
+  background: -webkit-linear-gradient(left,#ff916a, #FBC638); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right,#ff916a, #FBC638); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right,#ff916a, #FBC638); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right,#ff916a, #FBC638); /* 标准的语法 */
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-size: cover;
+  top: -30px;
+}
+.entrance-bottom-frame-line-title{
+  font-size: 20px;
+  font-weight: 800;
+  width: 900px;
+  margin: 70px auto 20px auto;
+}
+.entrance-bottom-frame-line-button{
+  transition: margin 0.8s;
+  position: relative;
+  cursor: pointer;
+  width: 420px;
+  height: 70px;
+  margin:10px 20px 0px 45px;
+  float: left;
+  box-sizing: border-box;
+  background: #f2f2f2;
+  border-radius: 36px;
+  padding: 0 35px;
+}
+.entrance-bottom-frame-line-button-id{
+  width: 30px;
+  line-height: 70px;
+  display: table-cell;
+  font-size: 24px;
+}
+.entrance-bottom-frame-line-button-frame{
+  line-height: 20px;
+  width: 335px;
+  height: 70px;
+  display: table-cell;
+  vertical-align:middle ;
+}
+.entrance-bottom-frame-line-button:hover{
+  color: white;
+  /*background: -webkit-linear-gradient(left,#ff916a, #ff6a6b); !* Safari 5.1 - 6.0 *!*/
+  /*background: -o-linear-gradient(right,#ff916a, #ff6a6b); !* Opera 11.1 - 12.0 *!*/
+  /*background: -moz-linear-gradient(right,#ff916a, #ff6a6b); !* Firefox 3.6 - 15 *!*/
+  /*background: linear-gradient(to right,#ff916a, #ff6a6b); !* 标准的语法 *!*/
+  background: -webkit-linear-gradient(left,#ff916a, #FBC638); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right,#ff916a, #FBC638); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right,#ff916a, #FBC638); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right,#ff916a, #FBC638); /* 标准的语法 */
+}
+.entrance-bottom-frame-line.active{
+  pointer-events: auto;
+  height: 630px;
+  margin-top: 0;
+  -webkit-filter: grayscale(0%);/* CSS3 filter方式，webkit内核方式，firefox外的绝大部分的现代浏览器*/
+  -moz-filter: grayscale(0%);            /* 目前没有实现 */
+  -o-filter: grayscale(0%);
+  filter: grayscale(0%);            /* CSS3 filter方式，标准写法*/
+  filter: none;   }
+.entrance-bottom-frame-line.active .entrance-bottom-frame-line-button{
+  margin-top: 30px;
+}
+.entrance-bottom-frame-line.active .entrance-bottom-frame-beijing{
+  display: none;
+}
+.entrance-bottom-frame-beijing.none{
+  background: #000000;opacity: 0.2;
+}
+.pre_message{
+  width: 900px;
+  height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 35px 90px;
+  box-sizing: border-box;
+  outline: none;
+  border: 0;
+  white-space: pre-wrap;
+  word-break: normal;
+  background:url(../images/code.png);
+  margin: 0 auto;
+  font-size: 14px;
+}
+.pre_message::-webkit-scrollbar{
+  display: none;
+}
+code {
+  font-size: 20px;
+  line-height: 40px;
+}
+
 
