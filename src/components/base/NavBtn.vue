@@ -29,7 +29,7 @@
           ["哈希算法", "/hashlearn"],
           ["非对称加密算法", "/acalearn"],
           ["数字签名之旅", "/dstalearn"],
-          ["我的题库", "/queslearn"]
+          ["小试身手", "/queslearn"]
         ],
         nav_sup: [
           ["题库管理", "/quesmag"],

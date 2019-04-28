@@ -1,6 +1,12 @@
 <template>
   <div class="main_con">
     <div class="pad_con">
+      <div @click="open_video" class="video_start_con">
+        <p style="font-family: '宋体' !important"><</p>
+      </div>
+
+      <drawer-video ref="video_dialog"></drawer-video>
+
       <!--界面导语及公钥私钥录入-->
       <transition name="trip_wel">
         <div v-if="show_welcome" class="wel_con">
@@ -181,9 +187,11 @@
 <script>
   import hex_md5 from 'js-md5'
   import JsEncrypt from 'jsencrypt'
+  import DrawerVideo from '@/components/base/Drawer_Video_trip'
   export default {
     data() {
       return {
+        dialogVisible:false,
         // 知识拓展内容
         trip_extra: false,
         // 打开私钥和公钥界面
@@ -226,12 +234,16 @@
       }
     },
     components: {
-
+      DrawerVideo
     },
     mounted() {
 
     },
     methods: {
+      open_video:function () {
+        let _this = this;
+        _this.$refs.video_dialog._data.dialogVisible = true
+      },
       // 改变黑客状态
       change_hack:function() {
         let _this = this

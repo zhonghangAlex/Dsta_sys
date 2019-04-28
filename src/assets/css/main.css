@@ -9,6 +9,38 @@
   overflow-y: auto;
 }
 
+.video_start_con {
+  position: absolute;
+  right: 0;
+  height: 50px;
+  width: 50px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: url("../../assets/images/video_logo.png");
+  top: 50%;
+  margin-top: -27px;
+  z-index: 10000;
+  text-align: left;
+  line-height: 50px;
+  font-size: 20px;
+  font-weight: 800;
+  margin-right: -41px;
+  border:2px solid #ffffff;
+  cursor: pointer;
+  color: #ffffff;
+  transition: all 0.5s;
+  overflow: hidden;
+}
+
+.video_start_con:hover {
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  transition: all 0.5s;
+  transform:  translateX( -41px )
+}
+
 /*学生用户-数组签名介绍界面*/
 /*轮播条*/
 .el-carousel {
@@ -700,10 +732,9 @@
 /*学生用户-题库界面*/
 .index {
   width: calc(100%);
-  height: 700px;
+  height: 800px;
   position: relative;
-  top: 50%;
-  margin-top: -380px;
+  margin-top: 30px;
   float: left;
 }
 .entrance-bottom-frame{
@@ -848,6 +879,58 @@
 code {
   font-size: 20px;
   line-height: 40px;
+}
+
+.choose_index_con {
+  width: 400px;
+  height: 60px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -200px;
+}
+
+.choose_index_con ul {
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border: 2px solid #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.choose_index_con ul li {
+  float: left;
+  line-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.ti_btn {
+  display: block;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #44a0b3;
+  line-height: 50px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.ti_btn_active {
+  background-color: #FAA600;
+}
+
+.jiexi_tag p{
+  margin-top: 15px;
+  line-height: 25px;
 }
 
 

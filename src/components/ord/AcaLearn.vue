@@ -1,6 +1,11 @@
 <template>
     <div class="main_con">
       <div class="pad_con">
+        <div @click="open_video" class="video_start_con">
+          <p style="font-family: '宋体' !important"><</p>
+        </div>
+
+        <drawer-video ref="video_dialog"></drawer-video>
 
         <el-row class="hash_con">
           <el-col class="col_con" :span="12">
@@ -273,6 +278,7 @@
 
 <script>
   import SaDiyDialog from '@/components/base/Sa_DIY_Dialog'
+  import DrawerVideo from '@/components/base/Drawer_Video_aca'
   let bigInt = require("big-integer")
   export default {
     data() {
@@ -347,17 +353,24 @@
         rsa_ola: '',
 
         // 密文信息
-        mi_info: ''
+        mi_info: '',
+
+        dialogVisible: false
       }
     },
     components:{
-      SaDiyDialog
+      SaDiyDialog,
+      DrawerVideo
     },
     mounted() {
 
     },
 
     methods: {
+      open_video:function () {
+        let _this = this;
+        _this.$refs.video_dialog._data.dialogVisible = true
+      },
       // 对话框开关控制
       open_sa_diy:function () {
         let _this = this;

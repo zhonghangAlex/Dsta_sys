@@ -1,6 +1,10 @@
 <template>
     <div class="main_con">
       <div class="pad_con">
+        <div @click="open_video" class="video_start_con">
+          <p style="font-family: '宋体' !important"><</p>
+        </div>
+
         <el-carousel :interval="4000" type="card" height="400px">
           <el-carousel-item v-for="(item, index) in kn_card" :key="index">
             <img class="swiper_img" :src="item.img_src" alt="数字签名"/>
@@ -21,13 +25,14 @@
               <div class="birth_text" >
                 <p v-html="item.card_text"></p>
                 <div v-if="index === 3" class="birth_op">
-                  <el-button class="diy_birth_btn" style="" type="primary" size="small" @click="open_diy">DIY验证</el-button>
-                  <el-button class="diy_birth_btn" style="" type="primary" size="small" @click="open_video">教学视频</el-button>
+                  <el-button class="diy_birth_btn" style="width: 70%;" type="primary" size="small" @click="open_diy">DIY验证</el-button>
                 </div>
               </div>
             </el-card>
           </el-col>
         </el-row>
+
+
 
         <birth-diy-dialog ref="diy_dialog"></birth-diy-dialog>
         <drawer-video ref="video_dialog"></drawer-video>
@@ -38,7 +43,7 @@
 
 <script>
   import BirthDiyDialog from '@/components/base/Birth_DIY_Dialog'
-  import DrawerVideo from '@/components/base/Drawer_Video'
+  import DrawerVideo from '@/components/base/Drawer_Video_birth'
   export default {
     data() {
       return {

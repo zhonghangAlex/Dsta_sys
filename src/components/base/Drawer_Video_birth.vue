@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="数字签名教学视频"
+    title="视频讲解（一）——生日碰撞问题"
     :visible.sync="dialogVisible"
     :append-to-body='true'
     width="70%"
@@ -29,9 +29,9 @@
             sources: [{
               type: "video/mp4",
               // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
-              src: "http://47.102.204.54:8080/total_video.mp4"
+              src: "http://47.102.204.54:8080/birthday.mp4"
             }],
-            poster: "/static/images/video_bg.jpg", //你的封面地址
+            // poster: "/static/images/video_bg.jpg", //你的封面地址
             width: document.documentElement.clientWidth,
             notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
             controlBar: {

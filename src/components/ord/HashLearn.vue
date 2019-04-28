@@ -2,15 +2,11 @@
   <div class="main_con">
     <div class="pad_con">
 
-      <!-- <div class="line_con">
-        <el-timeline>
-          <el-timeline-item v-for="(item, index) in line_text" :key="index" :timestamp="item.line_title" placement="top">
-            <el-card>
-              <p class="line_p">{{ item.line_text }}</p>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline>
-      </div> -->
+      <div @click="open_video" class="video_start_con">
+        <p style="font-family: '宋体' !important"><</p>
+      </div>
+
+      <drawer-video ref="video_dialog"></drawer-video>
 
       <el-row class="hash_con">
         <el-col class="col_con" :span="12">
@@ -497,9 +493,11 @@
 </template>
 
 <script>
+  import DrawerVideo from '@/components/base/Drawer_Video_hash'
   export default {
     data() {
       return {
+
         // 左边line型文本内容
         line_text: [
           {
@@ -565,16 +563,24 @@
         hash_center: '',
 
         // hash函数方法——位移折叠法
-        hash_coll: ''
+        hash_coll: '',
+
+        dialogVisible:false
       }
     },
-
+    components:{
+      DrawerVideo
+    },
     mounted() {
       this.init_source_data()
       this.init_hash_table()
     },
 
     methods: {
+      open_video:function () {
+        let _this = this;
+        _this.$refs.video_dialog._data.dialogVisible = true
+      },
       // 写死的知识卡片函数 2-1
       get_hashhalf_result: function () {
         let _this = this
