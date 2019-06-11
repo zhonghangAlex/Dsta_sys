@@ -840,6 +840,17 @@
   background: -moz-linear-gradient(right,#ff916a, #FBC638); /* Firefox 3.6 - 15 */
   background: linear-gradient(to right,#ff916a, #FBC638); /* 标准的语法 */
 }
+.button-choose {
+  color: white;
+  /*background: -webkit-linear-gradient(left,#ff916a, #ff6a6b); !* Safari 5.1 - 6.0 *!*/
+  /*background: -o-linear-gradient(right,#ff916a, #ff6a6b); !* Opera 11.1 - 12.0 *!*/
+  /*background: -moz-linear-gradient(right,#ff916a, #ff6a6b); !* Firefox 3.6 - 15 *!*/
+  /*background: linear-gradient(to right,#ff916a, #ff6a6b); !* 标准的语法 *!*/
+  background: -webkit-linear-gradient(left,#ff916a, #FBC638); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right,#ff916a, #FBC638); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right,#ff916a, #FBC638); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right,#ff916a, #FBC638); /* 标准的语法 */
+}
 .entrance-bottom-frame-line.active{
   pointer-events: auto;
   height: 630px;

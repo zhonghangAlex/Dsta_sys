@@ -22,12 +22,32 @@ export const Logout = params => {
   return axios.get(`${base}logout`, {params : params})
 }
 
-//获取学习时间接口(get)
+//获取学习时间接口(post)
 export const StudyTimeGet = params => {
   return axios.post(`${base}studytimeget`, params)
 }
 
-//发送学习时间接口(get)
+//发送学习时间接口(post)
 export const StudyTimeSend = params => {
   return axios.post(`${base}studytimesend`, params)
+}
+
+//自定义获取题目(get)
+export const GetQuestioninit = params => {
+  return axios.get(`${base}getQuestionInfo`, {params : params})
+}
+
+//编辑当前题目(post)
+export const EditQuestion = params => {
+  return axios.post(`${base}updateQuestion`, params)
+}
+
+//新增题目(post)
+export const AddQuestion = params => {
+  return axios.post(`${base}addQuestion`, params)
+}
+
+//删除题目(post)
+export const DeleteQuestion = params => {
+  return axios.post(`${base}deleteQuestion`, params)
 }

@@ -9,7 +9,7 @@
       <img src="../../assets/images/collage.svg" class="collapse" alt="collapse" ref="collapse" />
     </div>
 
-    <div class="time_container">
+    <div class="time_container" v-if="get_progress()">
       <span class="time_text"><span class="time_text_d">{{time_hours}}</span>时<span class="time_text_d">{{time_minutes}}</span>分<span class="time_text_d">{{time_seconds}}</span>秒</span>
       <img src="../../assets/images/time_total_l.svg" class="time_logo" />
     </div>
@@ -17,10 +17,10 @@
     <el-progress v-if="get_progress()" :text-inside="true" :stroke-width="18" :percentage="learn_per" status="success" color="#FBC638" class="stu_progress"></el-progress>
     <!--rgba(142, 113, 199, 0.7)-->
     <div class="userop_container">
-      <i class="item_container">
+      <i class="item_container" v-if="get_progress()">
         <img src="../../assets/images/girl_logo.svg" class="user_logo"/>
       </i>
-      <span class="username">
+      <span class="username" v-if="get_progress()">
         {{ cookieUserName }}
       </span>
       <ul class="icon_container">
@@ -103,7 +103,9 @@
     mounted(){
       let _this = this
       clearInterval(this.timer)
-      this.StudyTimeGet_fn()
+      if (this.get_progress()){
+        this.StudyTimeGet_fn()
+      }
       this.count_time()
       this.getUserName()
       window.onbeforeunload= function(event) {
