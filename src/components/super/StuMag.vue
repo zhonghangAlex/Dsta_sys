@@ -6,10 +6,10 @@
         <el-col :span="24" class="toolbar" style="margin-bottom: 0px;">
           <el-form :inline="true" :model="filters" style="width:100%;" >
             <el-form-item>
-              <el-input v-model="search" placeholder="输入关键字查询"></el-input>
+              <el-input v-model="search" placeholder="可搜索学生信息"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" v-on:click="getquestions(1)">查询</el-button>
+              <el-button type="primary" v-on:click="getstudents(1)">查询</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -23,10 +23,10 @@
         <!--批量导入界面-->
         <el-dialog title="Excel批量导入" :visible.sync ="fileimportVisible" :append-to-body='true' :close-on-click-modal="false" >
 
-          <el-upload  class="upload-demo" :limit=1  ref="upload" method="post" action="http://47.102.204.54:8080/uploadQuestion"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" :on-preview="handlePreview"  :on-remove="handleRemove" :on-success="handleSuccess" :on-error="handleError" :on-progress="handlePro"  :file-list="fileList" :data="uploadform"  :auto-upload="false">
+          <el-upload name="file"  class="upload-demo" enctype="multipart/form-data" :limit=1  ref="upload" action="http://47.102.204.54:8080/uploadStudent"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" :on-preview="handlePreview"  :on-remove="handleRemove" :on-success="handleSuccess" :on-error="handleError" :on-progress="handlePro"  :file-list="fileList" :data="updata"  :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-            <form method="get" action="http://47.102.204.54:8080/question_template.xlsx" style="position:absolute; margin-top:-32px;right:20px;" >
+            <form method="get" action="http://47.102.204.54:8080/user.xlsx" style="position:absolute; margin-top:-32px;right:20px;" >
               <el-button style="float:right" size="small"  type="success" native-type="submit" target="_blank">Excel模板下载</el-button>
             </form>
             <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件</div>
@@ -39,29 +39,38 @@
         </el-dialog>
 
         <!--列表-->
-        <el-table :data="question" fit  highlight-current-row :border="border" v-loading="listLoading" @selection-change="selsChange" style="width: 100%;margin-bottom:15px;" class="tablelist">
+        <el-table :data="student" fit  highlight-current-row :border="border" v-loading="listLoading" @selection-change="selsChange" style="width: 100%;margin-bottom:15px;" class="tablelist">
           <el-table-column fixed="left" type="selection" width="55" align="center" >
           </el-table-column>
-          <el-table-column  fixed="left" type="index" :index="tableindex" label="ID" width="60" align="center">
+          <el-table-column  fixed="left" type="index" :index="tableindex" label="序号" width="60" align="center">
           </el-table-column>
-          <el-table-column prop="id" label="唯一IP标识" v-if="showIPsig" max-width="0" align="center"  sortable>
+          <el-table-column prop="userid" label="学生学号"  min-width="150" align="center"  sortable>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">{{ scope.row.userid }}</el-tag>
+              </div>
+            </template>
           </el-table-column>
-          <el-table-column prop="code" label="题目内容" min-width="120" align="center" sortable>
+          <el-table-column prop="username" label="学生名称" min-width="120" align="center" sortable>
           </el-table-column>
-          <el-table-column prop="xuanxiang[0]" label="A选项" width="120" align="center" sortable>
+          <el-table-column prop="classroom" label="学生班级" width="220" align="center" sortable>
           </el-table-column>
-          <el-table-column prop="xuanxiang[1]" label="B选项" width="120" align="center" sortable>
+          <el-table-column prop="email" label="E-mail" min-width="200" align="center" sortable>
           </el-table-column>
-          <el-table-column prop="xuanxiang[2]" label="C选项" width="120" align="center" sortable>
+          <el-table-column prop="answer_time" label="累计答题次数" min-width="100" align="center" sortable>
           </el-table-column>
-          <el-table-column prop="xuanxiang[3]" label="D选项" width="120" align="center" sortable>
+          <el-table-column prop="correct_time" label="答题正确次数" min-width="100" align="center" sortable>
           </el-table-column>
-          <el-table-column prop="answer" label="正确答案" min-width="50" align="center" sortable>
+          <el-table-column prop="answer_time" label="答题正确率" min-width="200" align="center" sortable>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                <el-progress :text-inside="true" :stroke-width="20" :percentage="scope.row.answer_time === 0 ? 0 : (scope.row.correct_time / scope.row.answer_time).toFixed(2) * 100"></el-progress>
+              </div>
+            </template>
           </el-table-column>
-          <el-table-column prop="analysis" label="题目解析" min-width="120" align="center" sortable>
-          </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150" align="center">
+          <el-table-column fixed="right" label="操作" width="250" align="center">
             <template slot-scope="scope"><!--<template scope="scope">-->
+              <el-button size="small" type="primary" @click="resetPsw(scope.$index, scope.row)">重置密码</el-button>
               <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -82,29 +91,17 @@
     <!--编辑界面-->
     <el-dialog title="编辑" :visible.sync ="editFormVisible" :append-to-body='true' :close-on-click-modal="false" >
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="题目编号" >
-          <el-input v-model="editForm.questionID" :disabled="true"  style="width:400px;"></el-input>
+        <el-form-item label="学生学号" >
+          <el-input v-model="editForm.userid" :disabled="true"  style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="题目内容" >
-          <el-input v-model="editForm.question"  style="width:400px;"></el-input>
+        <el-form-item label="学生姓名">
+          <el-input v-model="editForm.username"  style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="A选项">
-          <el-input v-model="editForm.choiceA"  style="width:400px;"></el-input>
+        <el-form-item label="学生班级">
+          <el-input v-model="editForm.classroom" style="width:400px;"></el-input>
         </el-form-item>
-        <el-form-item label="B选项">
-          <el-input v-model="editForm.choiceB" style="width:400px;"></el-input>
-        </el-form-item>
-        <el-form-item label="C选项">
-          <el-input v-model="editForm.choiceC" style="width:400px;"></el-input>
-        </el-form-item>
-        <el-form-item label="D选项">
-          <el-input v-model="editForm.choiceD" style="width:400px;"></el-input>
-        </el-form-item>
-        <el-form-item label="正确答案">
-          <el-input v-model="editForm.answer" style="width:400px;"></el-input>
-        </el-form-item>
-        <el-form-item label="题目解析">
-          <el-input v-model="editForm.analysis" style="width:400px;"></el-input>
+        <el-form-item label="E-mail">
+          <el-input v-model="editForm.email" style="width:400px;"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -116,26 +113,17 @@
     <!--新增界面-->
     <el-dialog title="新增" :visible.sync="addFormVisible" :append-to-body='true' :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="题目内容"  style="width:400px;">
-          <el-input v-model="addForm.question" auto-complete="off"></el-input>
+        <el-form-item label="学生学号"  style="width:400px;">
+          <el-input v-model="addForm.userid" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="A选项" prop="name" style="width:400px;">
-          <el-input  v-model="addForm.choiceA"></el-input>
+        <el-form-item label="学生姓名" prop="name" style="width:400px;">
+          <el-input  v-model="addForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="B选项" style="width:400px;">
-          <el-input  v-model="addForm.choiceB"></el-input>
+        <el-form-item label="学生班级" style="width:400px;">
+          <el-input  v-model="addForm.classroom"></el-input>
         </el-form-item>
-        <el-form-item label="C选项" style="width:400px;">
-          <el-input  v-model="addForm.choiceC"></el-input>
-        </el-form-item>
-        <el-form-item label="D选项" style="width:400px;">
-          <el-input  v-model="addForm.choiceD"></el-input>
-        </el-form-item>
-        <el-form-item label="正确答案" style="width:400px;">
-          <el-input  v-model="addForm.answer"></el-input>
-        </el-form-item>
-        <el-form-item label="题目解析" style="width:400px;">
-          <el-input  v-model="addForm.analysis"></el-input>
+        <el-form-item label="E-mail" style="width:400px;">
+          <el-input  v-model="addForm.email"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -148,67 +136,53 @@
 
 <script>
   import axios from 'axios'
-  import { GetQuestioninit, EditQuestion, AddQuestion, DeleteQuestion } from "../../api/api";
+  import { GetUserInfo, EditUser, AddUser, DeleteUser, Teacherchange } from "../../api/api";
   export default {
     data() {
       return {
+        //权限
+        SuperPower: true,
         //文件上传
         fileList: [],
         limit:1,
-        uploadform:{
-
+        updata:{
+          teacherID: this.$cookies.get('userid')
         },
         fileimportVisible:false,
         //密码重置
-        //getquestions相关
+        //getstudents相关
         filters: {
           search: ''
         },
         search: '',
-        question: [],
+        student: [],
         total: 0,
         page: 1,
-        pagesize:5,
+        pagesize: 10,
         border:false,
         listLoading: false,
         sels: [],//列表选中列
-        showIPsig:false,
+        showIPsig:true,
         //编辑页面相关
         editFormVisible: false,//编辑界面是否显示
         editLoading: false,
         editFormRules: {
-          question: [
-            { required: true, message: '请输入题目', trigger: 'blur' }
+          username: [
+            { required: true, message: '请输入学生姓名', trigger: 'blur' }
           ],
-          choiceA: [
-            { required: true, message: '请输入A选项', trigger: 'blur' }
+          classroom: [
+            { required: true, message: '请输入学生班级', trigger: 'blur' }
           ],
-          choiceB: [
-            { required: true, message: '请输入B选项', trigger: 'blur' }
-          ],
-          choiceC: [
-            { required: true, message: '请输入C选项', trigger: 'blur' }
-          ],
-          choiceD: [
-            { required: true, message: '请输入D选项', trigger: 'blur' }
-          ],
-          answer: [
-            { required: true, message: '请输入正确选项', trigger: 'blur' }
-          ],
-          analysis: [
-            { required: true, message: '请输入题目解析', trigger: 'blur' }
+          email: [
+            { required: true, message: '请输入E-mail地址', trigger: 'blur' }
           ]
         },
         //编辑界面数据
         editForm: {
-          questionID:'',
-          question: '',
-          choiceA:'',
-          choiceB:'',
-          choiceC:'',
-          choiceD:'',
-          answer:'',
-          analysis:''
+          userid:'',
+          username:'',
+          classroom: '',
+          email:''
         },
         //编辑页面tag
         inputVisible: false,
@@ -217,48 +191,57 @@
         addFormVisible: false,//新增界面是否显示
         addLoading: false,
         addFormRules: {
-          question: [
-            { required: true, message: '请输入题目', trigger: 'blur' }
+          username: [
+            { required: true, message: '请输入学生姓名', trigger: 'blur' }
           ],
-          choiceA: [
-            { required: true, message: '请输入A选项', trigger: 'blur' }
+          classroom: [
+            { required: true, message: '请输入学生班级', trigger: 'blur' }
           ],
-          choiceB: [
-            { required: true, message: '请输入B选项', trigger: 'blur' }
-          ],
-          choiceC: [
-            { required: true, message: '请输入C选项', trigger: 'blur' }
-          ],
-          choiceD: [
-            { required: true, message: '请输入D选项', trigger: 'blur' }
-          ],
-          answer: [
-            { required: true, message: '请输入正确选项', trigger: 'blur' }
-          ],
-          analysis: [
-            { required: true, message: '请输入题目解析', trigger: 'blur' }
+          email: [
+            { required: true, message: '请输入E-mail地址', trigger: 'blur' }
           ]
         },
         //新增界面数据
         addForm: {
-          question: '',
-          choiceA:'',
-          choiceB:'',
-          choiceC:'',
-          choiceD:'',
-          answer:'',
-          analysis:''
+          userid: '',
+          username:'',
+          classroom:'',
+          email:'',
         },
         //新增页面tag
         inputVisible2: false,
         inputValue2: '',
 
+        change_id: (h, parms) => {
+          return h('el-tag', {
+            props: {
+              type: 'success',
+              size: 'small',
+            },
+          }, 'T' + parms.row.id)
+        }
       }
     },
     methods: {
+      if_super(){
+        if(!this.SuperPower) {
+          this.$message({
+            message: '当前为学生使用状态，您无权进行此操作',
+            type: 'error',
+            duration:2000,
+            showClose:true
+          });
+          return false
+        } else {
+          return true
+        }
+      },
       //批量导入操作
       //显示批量导入页面
       handleimport(){
+        if (!this.if_super()){
+          return false
+        }
         this.fileimportVisible = true;
       },
       //excel下载
@@ -267,6 +250,7 @@
         window.open("http://47.102.204.54:8080/question_template.xlsx");
       },
       submitUpload() {
+        console.log(this.fileList)
         this.$refs.upload.submit();
       },
       handleRemove(file, fileList) {
@@ -274,7 +258,7 @@
       handlePreview(file) {
       },
       handleSuccess(res, file, fileList){
-        if(res.status==0){
+        if(res.status==1){
           this.$message({
             message: res.message,
             type: 'error',
@@ -282,7 +266,7 @@
             showClose:true
           });
         }
-        if(res.status==1){
+        if(res.status==0){
           this.$message({
             message: res.message,
             type: 'success',
@@ -290,10 +274,9 @@
             showClose:true
           });
         }
-        this.getquestions(1);
+        this.getstudents(1);
       },
       handleError(err, file, fileList){
-
       },
       handlePro(event, file, fileList){
       },
@@ -302,12 +285,12 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pagesize = val;
-        this.getquestions(0);
+        this.getstudents(0);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.page = val;
-        this.getquestions(0);
+        this.getstudents(0);
         return
       },
 
@@ -317,7 +300,7 @@
         return index;
       },
       //获取用户列表
-      getquestions(x) {
+      getstudents(x) {
         let _this = this;
         this.listLoading = true;
         if(x == 1){
@@ -326,11 +309,12 @@
         let params = {
           pageNum: _this.page,//查询参数
           pageSize:_this.pagesize,
-          searchKey: _this.search//查询参数
+          searchKey: _this.search,//查询参数
+          userid: _this.$cookies.get('userid')//用户参数
         }
-        GetQuestioninit(params).then((response)=>{
+        GetUserInfo(params).then((response)=>{
           _this.total = response.data.result.total
-          _this.question = response.data.result.list
+          _this.student = response.data.result.list
           _this.listLoading = false;
         }).catch((err)=>{
           console.log(err)
@@ -344,15 +328,18 @@
       },
       //删除
       handleDel: function (index, row) {
+        if(!this.if_super()){
+          return false
+        }
         let _this = this;
         this.$confirm('确认删除该记录吗?', '提示', {
           type: 'warning'
         }).then(() => {
-          let list = [row.id]
+          let list = [row.userid]
           let params = {
-            questionID: list,
+            userid: list,
           }
-          DeleteQuestion(params).then((response)=>{
+          DeleteUser(params).then((response)=>{
             let res = response.data;
             if(res.status==0)
               _this.$message({
@@ -364,7 +351,7 @@
                 message: res.message,
                 type: 'error'
               });
-            _this.getquestions(0);
+            _this.getstudents(0);
             _this.listLoading = false;
           }).catch((err)=>{
             console.log(err)
@@ -382,18 +369,20 @@
 
       //显示编辑界面
       handleEdit: function (index, row) {
+        if(!this.if_super()){
+          return false
+        }
         this.editFormVisible = true;
-        this.editForm.questionID = Object.assign({}, row).id
-        this.editForm.question = Object.assign({}, row).code
-        this.editForm.choiceA = Object.assign({}, row).xuanxiang[0]
-        this.editForm.choiceB = Object.assign({}, row).xuanxiang[1]
-        this.editForm.choiceC = Object.assign({}, row).xuanxiang[2]
-        this.editForm.choiceD = Object.assign({}, row).xuanxiang[3]
-        this.editForm.answer = Object.assign({}, row).answer
-        this.editForm.analysis = Object.assign({}, row).analysis
+        this.editForm.userid = Object.assign({}, row).userid
+        this.editForm.username = Object.assign({}, row).username
+        this.editForm.classroom = Object.assign({}, row).classroom
+        this.editForm.email = Object.assign({}, row).email
       },
       //显示新增界面
       handleAdd: function () {
+        if(!this.if_super()){
+          return false
+        }
         this.addFormVisible = true;
         this.addForm = {
           question: '',
@@ -414,7 +403,7 @@
               this.editLoading = true;
               let params = Object.assign({}, this.editForm);
               // params.way = 2;
-              EditQuestion(params).then((response)=>{
+              EditUser(params).then((response)=>{
                 _this.editLoading = false;
                 let res=response.data
                 if(res.status==0)
@@ -429,7 +418,7 @@
                   });
                 _this.$refs['editForm'].resetFields();
                 _this.editFormVisible = false;
-                _this.getquestions(0);
+                _this.getstudents(0);
               }).catch((err)=>{
                 console.log(err)
                 _this.$message({
@@ -456,7 +445,7 @@
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
               this.addLoading = true;
               let params = Object.assign({}, this.addForm)
-              AddQuestion(params).then((response)=>{
+              AddUser(params).then((response)=>{
                 let res = response.data;
                 _this.addLoading = false;
                 if(res.status==0)
@@ -471,7 +460,7 @@
                   });
                 _this.$refs['addForm'].resetFields();
                 _this.addFormVisible = false;
-                _this.getquestions(0);
+                _this.getstudents(0);
               }).catch((err)=>{
                 console.log(err)
                 _this.$message({
@@ -491,16 +480,19 @@
 
       //批量删除
       batchRemove: function () {
+        if(!this.if_super()){
+          return false
+        }
         let _this = this;
         let list = []
-        this.sels.forEach(item => list.push(item.id))
+        this.sels.forEach(item => list.push(item.userid))
         this.$confirm('确认删除选中记录吗？', '提示', {
           type: 'warning'
         }).then(() => {
           let params = {
-            questionID: list
+            userid: list
           };
-          DeleteQuestion(params).then((response)=>{
+          DeleteUser(params).then((response)=>{
             let res = response.data;
             if(res.status==0)
               _this.$message({
@@ -512,7 +504,7 @@
                 message: res.message,
                 type: 'error'
               });
-            _this.getquestions(0);
+            _this.getstudents(0);
             _this.listLoading = false;
           }).catch((err)=>{
             console.log(err)
@@ -530,19 +522,59 @@
 
       finishup: function () {
         this.fileimportVisible = false
-        this.getquestions(1)
+        this.getstudents(1)
+      },
+      // 重置密码
+      resetPsw:function (index, row) {
+        let _this = this;
+        let params = {
+          userid: row.userid,
+        }
+        //和删除一样的ID 接口位置sturesetpsd
+        this.$confirm('确认要重置密码吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          Teacherchange(params).then((response)=>{
+              let d = response.data;
+              if(d.status==0)
+                _this.$message({
+                  message: d.message,
+                  type: 'success'
+                });
+              if(d.status==1)
+                _this.$message({
+                  message: d.message,
+                  type: 'error'
+                });
+              _this.getstudents(0);
+              _this.listLoading = false;
+            })
+            .catch(function (error) {
+              console.log(error);
+              _this.listLoading = false;
+            });
+        }).catch(() => {
+          console.log(err)
+          _this.$message({
+            message: '数据请求失败，请检查网络',
+            type: 'error',
+            duration:2000,
+            showClose:true
+          });
+        });
       }
     },
     mounted() {
-      this.getquestions(0);
+      this.getstudents(0);
     },
     watch: {
       search(curVal, oldVal) {
         // 实现input连续输入，只发一次请求
-        // this.getquestions(1);
+        // this.getstudents(1);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
-          this.getquestions(1);
+          this.getstudents(1);
         }, 300);
       }
     }

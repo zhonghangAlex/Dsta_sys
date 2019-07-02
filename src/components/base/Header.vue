@@ -17,10 +17,10 @@
     <el-progress v-if="get_progress()" :text-inside="true" :stroke-width="18" :percentage="learn_per" status="success" color="#FBC638" class="stu_progress"></el-progress>
     <!--rgba(142, 113, 199, 0.7)-->
     <div class="userop_container">
-      <i class="item_container" v-if="get_progress()">
+      <i class="item_container" >
         <img src="../../assets/images/girl_logo.svg" class="user_logo"/>
       </i>
-      <span class="username" v-if="get_progress()">
+      <span class="username">
         {{ cookieUserName }}
       </span>
       <ul class="icon_container">

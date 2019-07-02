@@ -1,6 +1,6 @@
 <template>
     <div class="main_con">
-      <div class="pad_con">
+      <div class="pad_con introduce_index">
         <div @click="open_video" class="video_start_con">
           <p style="font-family: '宋体' !important"><</p>
         </div>

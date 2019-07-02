@@ -6,7 +6,7 @@
         <el-col :span="24" class="toolbar" style="margin-bottom: 0px;">
           <el-form :inline="true" :model="filters" style="width:100%;" >
             <el-form-item>
-              <el-input v-model="search" placeholder="输入关键字查询"></el-input>
+              <el-input v-model="search" placeholder="可搜索题号、题干、选项"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" v-on:click="getquestions(1)">查询</el-button>
@@ -23,7 +23,7 @@
         <!--批量导入界面-->
         <el-dialog title="Excel批量导入" :visible.sync ="fileimportVisible" :append-to-body='true' :close-on-click-modal="false" >
 
-          <el-upload name="file"  class="upload-demo" :limit=1  ref="upload" method="post" action="http://47.102.204.54:8080/uploadQuestion"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" :on-preview="handlePreview"  :on-remove="handleRemove" :on-success="handleSuccess" :on-error="handleError" :on-progress="handlePro"  :file-list="fileList" :data="uploadform"  :auto-upload="false">
+          <el-upload name="file"  class="upload-demo" enctype="multipart/form-data" :limit=1  ref="upload" action="http://47.102.204.54:8080/uploadQuestion"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" :on-preview="handlePreview"  :on-remove="handleRemove" :on-success="handleSuccess" :on-error="handleError" :on-progress="handlePro"  :file-list="fileList" :data="uploadform"  :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
             <form method="get" action="http://47.102.204.54:8080/question_template.xlsx" style="position:absolute; margin-top:-32px;right:20px;" >
@@ -42,9 +42,14 @@
         <el-table :data="question" fit  highlight-current-row :border="border" v-loading="listLoading" @selection-change="selsChange" style="width: 100%;margin-bottom:15px;" class="tablelist">
           <el-table-column fixed="left" type="selection" width="55" align="center" >
           </el-table-column>
-          <el-table-column  fixed="left" type="index" :index="tableindex" label="ID" width="60" align="center">
+          <el-table-column  fixed="left" type="index" :index="tableindex" label="序号" width="60" align="center">
           </el-table-column>
-          <el-table-column prop="id" label="唯一IP标识" v-if="showIPsig" max-width="0" align="center"  sortable>
+          <el-table-column prop="id" label="题目编号" v-if="showIPsig"  max-width="0" align="center"  sortable>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">{{ scope.row.id }}</el-tag>
+              </div>
+            </template>
           </el-table-column>
           <el-table-column prop="code" label="题目内容" min-width="120" align="center" sortable>
           </el-table-column>
@@ -152,6 +157,8 @@
   export default {
     data() {
       return {
+        //权限
+        SuperPower: true,
         //文件上传
         fileList: [],
         limit:1,
@@ -168,11 +175,11 @@
         question: [],
         total: 0,
         page: 1,
-        pagesize:5,
+        pagesize: 10,
         border:false,
         listLoading: false,
         sels: [],//列表选中列
-        showIPsig:false,
+        showIPsig:true,
         //编辑页面相关
         editFormVisible: false,//编辑界面是否显示
         editLoading: false,
@@ -253,12 +260,36 @@
         inputVisible2: false,
         inputValue2: '',
 
+        change_id: (h, parms) => {
+          return h('el-tag', {
+            props: {
+              type: 'success',
+              size: 'small',
+            },
+          }, 'T' + parms.row.id)
+        }
       }
     },
     methods: {
+      if_super(){
+        if(!this.SuperPower) {
+          this.$message({
+            message: '当前为学生使用状态，您无权进行此操作',
+            type: 'error',
+            duration:2000,
+            showClose:true
+          });
+          return false
+        } else {
+          return true
+        }
+      },
       //批量导入操作
       //显示批量导入页面
       handleimport(){
+        if (!this.if_super()){
+          return false
+        }
         this.fileimportVisible = true;
       },
       //excel下载
@@ -267,6 +298,7 @@
         window.open("http://47.102.204.54:8080/question_template.xlsx");
       },
       submitUpload() {
+        console.log(this.fileList)
         this.$refs.upload.submit();
       },
       handleRemove(file, fileList) {
@@ -293,7 +325,6 @@
         this.getquestions(1);
       },
       handleError(err, file, fileList){
-
       },
       handlePro(event, file, fileList){
       },
@@ -344,6 +375,9 @@
       },
       //删除
       handleDel: function (index, row) {
+        if(!this.if_super()){
+          return false
+        }
         let _this = this;
         this.$confirm('确认删除该记录吗?', '提示', {
           type: 'warning'
@@ -382,6 +416,9 @@
 
       //显示编辑界面
       handleEdit: function (index, row) {
+        if(!this.if_super()){
+          return false
+        }
         this.editFormVisible = true;
         this.editForm.questionID = Object.assign({}, row).id
         this.editForm.question = Object.assign({}, row).code
@@ -394,6 +431,9 @@
       },
       //显示新增界面
       handleAdd: function () {
+        if(!this.if_super()){
+          return false
+        }
         this.addFormVisible = true;
         this.addForm = {
           question: '',
@@ -491,6 +531,9 @@
 
       //批量删除
       batchRemove: function () {
+        if(!this.if_super()){
+          return false
+        }
         let _this = this;
         let list = []
         this.sels.forEach(item => list.push(item.id))

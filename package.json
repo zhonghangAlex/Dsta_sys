@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "big-integer": "^1.6.43",
+    "echarts": "^4.2.1",
     "element-ui": "^2.6.1",
     "js-md5": "^0.7.3",
     "jsencrypt": "^3.0.0-rc.1",

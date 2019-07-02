@@ -282,6 +282,9 @@
               duration:2000,
               showClose:true
             });
+            _this.userName = res.result.username
+            _this.$cookies.set("username", _this.userName)
+            _this.$cookies.set("userid", _this.userID)
             _this.$router.push("/superindex")
           }else {
             _this.$message({

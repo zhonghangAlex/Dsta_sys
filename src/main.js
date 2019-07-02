@@ -10,6 +10,8 @@ import VideoPlayer from 'vue-video-player'
 import VueCookies from 'vue-cookies'
 import store from './store/store.js'
 import JsEncrypt from 'jsencrypt'
+import echarts from 'echarts' //引入echarts
+Vue.prototype.$echarts = echarts //引入组件
 
 
 Vue.prototype.$jsEncrypt = JsEncrypt
